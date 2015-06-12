@@ -1,0 +1,26 @@
+{
+  "name": "react-native-in-app-utils",
+  "version": "0.1.0",
+  "description": "A react-native wrapper for handling in-app payments.",
+  "author": {
+    "name": "Chirag Jain",
+    "email": "jain_chirag04@yahoo.com",
+    "url": "http://chiragjain.tumblr.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:chirag04/react-native-in-app-utils.git"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "react-component",
+    "ios",
+    "in-app",
+    "payments",
+    "purchases"
+  ],
+  "dependencies": {
+    "react-native": "^0.5.0"
+  }
+}
