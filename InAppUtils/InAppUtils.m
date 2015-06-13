@@ -172,6 +172,11 @@ RCT_EXPORT_METHOD(loadProducts:(RCTResponseSenderBlock)callback)
     }
 }
 
+- (void)dealloc
+{
+    [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
+}
+
 #pragma mark Private
 
 static NSString *RCTKeyForInstance(id instance)
