@@ -12,9 +12,36 @@ A react-native wrapper for handling in-app payments.
 4. Whenever you want to use it within React code now you can: `var InAppUtils = require('NativeModules').InAppUtils;`
 
 
-## Example
-```javascript
-var InAppUtils = require('NativeModules').InAppUtils;
+## Api
 
-//todo add more info here.
+### Loading products
+```javascript
+var products = [
+   'com.xyz.abc',
+];
+InAppUtils.loadProducts(products, (error, products) => {
+   //update store here.
+});
+```
+
+### Buy product
+```javascript
+var productIdentifier = 'com.xyz.abc';
+InAppUtils.purchaseProduct(productIdentifier, (error, identifier) => {
+   if(identifier) {
+      //unlock store here.
+   }
+});
+```
+
+### Restore payments
+```javascript
+InAppUtils.restorePurchases((error, products)=> {
+   if(error) {
+      AlertIOS.alert('itunes Error', 'Could not connect to itunes store.');
+   } else {
+      AlertIOS.alert('Restore Successful', 'Successfully restores all your purchases.');
+      //unlock store here again.
+   }
+});
 ```
