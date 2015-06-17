@@ -132,13 +132,10 @@ RCT_EXPORT_METHOD(restorePurchases:(RCTResponseSenderBlock)callback)
     [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
 }
 
-RCT_EXPORT_METHOD(loadProducts:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_METHOD(loadProducts:(NSArray *)productIdentifiers
+                  callback:(RCTResponseSenderBlock)callback)
 {
     if([SKPaymentQueue canMakePayments]){
-        NSArray *productIdentifiers = @[
-                                        @"com.lrnjs.lessons_all",
-                                        @"com.lrnjs.lessons_1"
-                                        ];
         SKProductsRequest *productsRequest = [[SKProductsRequest alloc]
                                               initWithProductIdentifiers:[NSSet setWithArray:productIdentifiers]];
         productsRequest.delegate = self;
