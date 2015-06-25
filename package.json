@@ -20,7 +20,7 @@
     "payments",
     "purchases"
   ],
-  "dependencies": {
-    "react-native": "^0.5.0"
+  "peerDependencies": {
+    "react-native": ">= 0.4 || 0.7.0-rc1"
   }
 }
