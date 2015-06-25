@@ -2,6 +2,9 @@
 
 A react-native wrapper for handling in-app payments.
 
+# Note
+You need apple developer account for using in-app payments. Flow the answer here(http://stackoverflow.com/questions/19556336/how-do-you-add-an-in-app-purchase-to-an-ios-application) to get started on setting up in-app payments in iTunes connect first.
+
 ### Add it to your project
 
 1. Run `npm install react-native-in-app-utils --save`
