@@ -21,7 +21,7 @@ A react-native wrapper for handling in-app purchases.
 4. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;`
 
 
-## Api
+## API
 
 ### Loading products
 
@@ -59,3 +59,13 @@ InAppUtils.restorePurchases((error, products)=> {
    }
 });
 ```
+
+## Testing
+
+To test your in-app purchases, you have to *run the app on an actual device*. Using the iOS Simulator, they will always fail.
+
+1. Set up a test account ("Sandbox Tester") in iTunes Connect. See the official documentation [here](https://developer.apple.com/library/ios/documentation/LanguagesUtilities/Conceptual/iTunesConnect_Guide/Chapters/SettingUpUserAccounts.html#//apple_ref/doc/uid/TP40011225-CH25-SW9).
+
+2. Run your app on an actual iOS device. To do so, first [run the react-native server on the local network](https://facebook.github.io/react-native/docs/runningondevice.html) instead of localhost. Then connect your iDevice to your Mac via USB and [select it from the list of available devices and simulators](https://i.imgur.com/6ifsu8Q.jpg) in the very top bar. (Next to the build and stop buttons)
+
+3. Open the app and buy something with your Sandbox Tester Apple Account!
