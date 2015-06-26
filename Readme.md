@@ -21,7 +21,7 @@ A react-native wrapper for handling in-app purchases.
 4. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;`
 
 
-## Api
+## API
 
 ### Loading products
 
