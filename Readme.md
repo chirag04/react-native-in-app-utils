@@ -2,22 +2,31 @@
 
 A react-native wrapper for handling in-app payments.
 
-# Note
-You need apple developer account for using in-app payments. Flow the answer here(http://stackoverflow.com/questions/19556336/how-do-you-add-an-in-app-purchase-to-an-ios-application) to get started on setting up in-app payments in iTunes connect first.
+# Notes
+
+- You need Apple Developer account for using in-app payments.
+
+- You have to set up your in-app payments in iTunes Connect first. Follow this [tutorial](http://stackoverflow.com/questions/19556336/how-do-you-add-an-in-app-purchase-to-an-ios-application) for an easy explanation.
+
+- You have to test your app on a real device, In App Payments will always fail on the Simulator.
 
 ### Add it to your project
 
-1. Run `npm install react-native-in-app-utils --save`
-2. Open your project in XCode, right click on `Libraries` and click `Add
-   Files to "Your Project Name"` [(Screenshot)](http://url.brentvatne.ca/jQp8) then [(Screenshot)](http://url.brentvatne.ca/1gqUD).
-3. Add `libInAppUtils.a` to `Build Phases -> Link Binary With Libraries`
-   [(Screenshot)](http://url.brentvatne.ca/17Xfe).
-4. Whenever you want to use it within React code now you can: `var InAppUtils = require('NativeModules').InAppUtils;`
+1. Run `npm install react-native-in-app-utils --save`.
+
+2. Open your project in XCode, right click on `Libraries`, click `Add Files to "Your Project Name"` and add `InAppUtils.xcodeproj`. (situated in `node_modules/react-native-in-app-utils`) [(This](http://url.brentvatne.ca/jQp8) then [this](http://url.brentvatne.ca/1gqUD), just with InAppUtils).
+
+3. Link `libInAppUtils.a` with your Libararies. To do that, click on your project folder, select `Build Phases` in the top bar, scroll to `Link Binary with Libraries`, press the `+` at the very bottom and add `libInAppUtils.a` from the `node_modules/react-native-in-app-utils/InAppUtils` folder. [(Screenshot)](http://url.brentvatne.ca/17Xfe).
+
+4. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;`
 
 
 ## Api
 
 ### Loading products
+
+You have to load the products first to get the correctly internationalized name and price in the correct currency.
+
 ```javascript
 var products = [
    'com.xyz.abc',
@@ -28,6 +37,7 @@ InAppUtils.loadProducts(products, (error, products) => {
 ```
 
 ### Buy product
+
 ```javascript
 var productIdentifier = 'com.xyz.abc';
 InAppUtils.purchaseProduct(productIdentifier, (error, identifier) => {
@@ -38,6 +48,7 @@ InAppUtils.purchaseProduct(productIdentifier, (error, identifier) => {
 ```
 
 ### Restore payments
+
 ```javascript
 InAppUtils.restorePurchases((error, products)=> {
    if(error) {
