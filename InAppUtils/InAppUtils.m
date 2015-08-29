@@ -49,7 +49,11 @@ RCT_EXPORT_MODULE()
                 NSString *key = RCTKeyForInstance(transaction.payment.productIdentifier);
                 RCTResponseSenderBlock callback = _callbacks[key];
                 if (callback) {
-                    callback(@[[NSNull null], transaction.payment.productIdentifier]);
+                    NSDictionary *purchase = @{
+                                              @"transactionIdentifier": transaction.transactionIdentifier,
+                                              @"productIdentifier": transaction.payment.productIdentifier
+                                              };
+                    callback(@[[NSNull null], purchase]);
                     [_callbacks removeObjectForKey:key];
                 } else {
                     RCTLogWarn(@"No callback registered for transaction with state purcahsed.");

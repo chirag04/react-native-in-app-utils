@@ -40,8 +40,9 @@ InAppUtils.loadProducts(products, (error, products) => {
 
 ```javascript
 var productIdentifier = 'com.xyz.abc';
-InAppUtils.purchaseProduct(productIdentifier, (error, identifier) => {
-   if(identifier) {
+InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
+   if(response) {
+      AlertIOS.alert('Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
       //unlock store here.
    }
 });
