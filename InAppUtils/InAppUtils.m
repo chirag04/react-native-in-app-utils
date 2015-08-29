@@ -150,6 +150,17 @@ RCT_EXPORT_METHOD(loadProducts:(NSArray *)productIdentifiers
     }
 }
 
+RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
+{
+    NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
+    NSData *receiptData = [NSData dataWithContentsOfURL:receiptUrl];
+    if (!receiptData) {
+      callback(@[@"not_available"]);
+    } else {
+      callback(@[[NSNull null], [receiptData base64EncodedStringWithOptions:0]]);
+    }
+}
+
 // SKProductsRequestDelegate protocol method
 - (void)productsRequest:(SKProductsRequest *)request
      didReceiveResponse:(SKProductsResponse *)response

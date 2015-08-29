@@ -61,6 +61,20 @@ InAppUtils.restorePurchases((error, products)=> {
 });
 ```
 
+### Receipts
+
+iTunes receipts are associated to the users iTunes account and can be retrieved without any product reference. 
+
+```javascript
+InAppUtils.receiptData((error, receiptData)=> {
+  if(error) {
+    AlertIOS.alert('itunes Error', 'Receipt not found.');
+  } else {
+    //send to validation server
+  }
+});
+```
+
 ## Testing
 
 To test your in-app purchases, you have to *run the app on an actual device*. Using the iOS Simulator, they will always fail.
