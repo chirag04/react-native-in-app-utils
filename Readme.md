@@ -41,7 +41,7 @@ InAppUtils.loadProducts(products, (error, products) => {
 ```javascript
 var productIdentifier = 'com.xyz.abc';
 InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
-   if(response) {
+   if(response && response.productIdentifier) {
       AlertIOS.alert('Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
       //unlock store here.
    }
