@@ -173,7 +173,10 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
         for(SKProduct *item in response.products) {
             NSDictionary *product = @{
                                       @"identifier": item.productIdentifier,
-                                      @"priceString": item.priceString
+                                      @"priceString": item.priceString,
+                                      @"downloadable": item.downloadable ? @"true" : @"false" ,
+                                      @"localizedDescription": item.localizedDescription,
+                                      @"localizedTitle": item.localizedTitle,
                                       };
             [productsArrayForJS addObject:product];
         }
