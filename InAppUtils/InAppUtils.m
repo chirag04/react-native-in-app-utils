@@ -204,7 +204,7 @@ RCT_EXPORT_METHOD(paidForApp:(RCTResponseSenderBlock)callback)
         NSString *key = RCTKeyForInstance(@"paidForAppRequest");
         RCTResponseSenderBlock callback = _callbacks[key];
         if (callback) {
-            callback(@[@"not_available"]);
+            callback(@[@"paid_for_app"]);
             [_callbacks removeObjectForKey:key];
         }
     }
@@ -215,7 +215,7 @@ RCT_EXPORT_METHOD(paidForApp:(RCTResponseSenderBlock)callback)
     NSString *key = RCTKeyForInstance(@"paidForAppRequest");
     RCTResponseSenderBlock callback = _callbacks[key];
     if (callback) {
-        callback(@[[NSNull null], @"NO, you need to buy the in-app purchase"]);
+        callback(@[[NSNull null]]);
         [_callbacks removeObjectForKey:key];
     }
 }
