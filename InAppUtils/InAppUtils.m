@@ -189,6 +189,37 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
     [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
 }
 
+RCT_EXPORT_METHOD(paidForApp:(RCTResponseSenderBlock)callback)
+{
+    NSString *restoreRequest = @"paidForAppRequest";
+    _callbacks[RCTKeyForInstance(restoreRequest)] = callback;
+    SKReceiptRefreshRequest* request = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:nil];
+    request.delegate = self;
+    [request start];
+}
+
+-(void)requestDidFinish:(SKRequest*)request{
+    if([request isKindOfClass:[SKReceiptRefreshRequest class]]){
+        NSLog(@"YES, You purchased this app");
+        NSString *key = RCTKeyForInstance(@"paidForAppRequest");
+        RCTResponseSenderBlock callback = _callbacks[key];
+        if (callback) {
+            callback(@[@"not_available"]);
+            [_callbacks removeObjectForKey:key];
+        }
+    }
+}
+
+- (void)request:(SKRequest*)request didFailWithError:(NSError *)error{
+    NSLog(@"NO, you need to buy it");
+    NSString *key = RCTKeyForInstance(@"paidForAppRequest");
+    RCTResponseSenderBlock callback = _callbacks[key];
+    if (callback) {
+        callback(@[[NSNull null], @"NO, you need to buy the in-app purchase"]);
+        [_callbacks removeObjectForKey:key];
+    }
+}
+
 #pragma mark Private
 
 static NSString *RCTKeyForInstance(id instance)
