@@ -175,8 +175,8 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                                       @"identifier": item.productIdentifier,
                                       @"priceString": item.priceString,
                                       @"downloadable": item.downloadable ? @"true" : @"false" ,
-                                      @"description": item.localizedDescription,
-                                      @"title": item.localizedTitle,
+                                      @"description": item.localizedDescription ? item.localizedDescription : @"",
+                                      @"title": item.localizedTitle ? item.localizedTitle : @"",
                                       };
             [productsArrayForJS addObject:product];
         }
