@@ -36,6 +36,19 @@ InAppUtils.loadProducts(products, (error, products) => {
 });
 ```
 
+**Response fields:**
+
+| Field          | Type    | Description                                 |
+| -------------- | ------- | ------------------------------------------- |
+| identifier     | string  | The product identifier                      |
+| price          | number  | The price as a number                       |
+| currencySymbol | string  | The currency symbol, i.e. "$" or "SEK"      |
+| currencyCode   | string  | The currency code, i.e. "USD" of "SEK"      |
+| priceString    | string  | Localised string of price, i.e. "$1,234.00" |
+| downloadable   | boolean | Whether the purchase is downloadable        |
+| description    | string  | Description string                          |
+| title          | string  | Title string                                |
+
 ### Buy product
 
 ```javascript
@@ -47,6 +60,14 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
    }
 });
 ```
+
+**Response fields:**
+
+| Field                 | Type   | Description                |
+| --------------------- | ------ | -------------------------- |
+| transactionIdentifier | string | The product identifier     |
+| productIdentifier     | string | The transaction identifier |
+
 
 ### Restore payments
 
@@ -61,6 +82,8 @@ InAppUtils.restorePurchases((error, products)=> {
 });
 ```
 
+**Response:** An array of product identifiers (as strings).
+
 ### Receipts
 
 iTunes receipts are associated to the users iTunes account and can be retrieved without any product reference. 
@@ -74,6 +97,8 @@ InAppUtils.receiptData((error, receiptData)=> {
   }
 });
 ```
+
+**Response:** The receipt as a base64 encoded string.
 
 ## Testing
 
