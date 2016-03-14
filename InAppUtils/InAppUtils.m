@@ -54,12 +54,6 @@ RCT_EXPORT_MODULE()
                         case SKErrorStoreProductNotAvailable:
                             callback(@[@"transaction_failed_store_product_not_available"]);
                             break;
-                        case SKErrorCloudServicePermissionDenied:
-                            callback(@[@"transaction_failed_cloud_service_permission_denied"]);
-                            break;
-                        case SKErrorCloudServiceNetworkConnectionFailed:
-                            callback(@[@"transaction_failed_cloud_service_network_connection_failed"]);
-                            break;
                         default:
                             break;
                     }
