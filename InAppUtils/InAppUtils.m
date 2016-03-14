@@ -1,6 +1,7 @@
 #import "InAppUtils.h"
 #import <StoreKit/StoreKit.h>
 #import "RCTLog.h"
+#import "RCTUtils.h"
 
 #import "SKProduct+StringPrice.h"
 
@@ -35,9 +36,35 @@ RCT_EXPORT_MODULE()
                 NSString *key = RCTKeyForInstance(transaction.payment.productIdentifier);
                 RCTResponseSenderBlock callback = _callbacks[key];
                 if (callback) {
-                    if(transaction.error.code != SKErrorPaymentCancelled){
-                        callback(@[@"transaction_failed"]);
+                    switch (transaction.error.code) {
+                        case SKErrorUnknown:
+                            callback(@[@"transaction_failed_unknown"]);
+                            break;
+                        case SKErrorClientInvalid:
+                            callback(@[@"transaction_failed_client_invalid"]);
+                            break;
+                        case SKErrorPaymentCancelled:
+                            callback(@[@"transaction_failed_payment_cancelled"]);
+                            break;
+                        case SKErrorPaymentInvalid:
+                            callback(@[@"transaction_failed_payment_invalid"]);
+                            break;
+                        case SKErrorPaymentNotAllowed:
+                            callback(@[@"transaction_failed_payment_not_allowed"]);
+                            break;
+                        case SKErrorStoreProductNotAvailable:
+                            callback(@[@"transaction_failed_store_product_not_available"]);
+                            break;
+                        case SKErrorCloudServicePermissionDenied:
+                            callback(@[@"transaction_failed_cloud_service_permission_denied"]);
+                            break;
+                        case SKErrorCloudServiceNetworkConnectionFailed:
+                            callback(@[@"transaction_failed_cloud_service_network_connection_failed"]);
+                            break;
+                        default:
+                            break;
                     }
+
                     [_callbacks removeObjectForKey:key];
                 } else {
                     RCTLogWarn(@"No callback registered for transaction with state failed.");
