@@ -18,7 +18,12 @@ A react-native wrapper for handling in-app purchases.
 
 3. Run `rnpm link react-native-in-app-utils`
 
-4. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;` or for ES6: `import { InAppUtils } from 'NativeModules'`
+4. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;` 
+   or for ES6: 
+   ```
+   import { NativeModules } from 'react-native'
+   import { InAppUtils } from 'NativeModules'
+   ```
 
 
 ## API
