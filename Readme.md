@@ -14,11 +14,11 @@ A react-native wrapper for handling in-app purchases.
 
 1. Run `npm install react-native-in-app-utils --save`.
 
-2. Open your project in XCode, right click on `Libraries`, click `Add Files to "Your Project Name"` and add `InAppUtils.xcodeproj`. (situated in `node_modules/react-native-in-app-utils`) [(This](http://url.brentvatne.ca/jQp8) then [this](http://url.brentvatne.ca/1gqUD), just with InAppUtils).
+2. Make sure you have `rnpm` installed: `npm install rnpm -g`
 
-3. Link `libInAppUtils.a` with your Libararies. To do that, click on your project folder, select `Build Phases` in the top bar, scroll to `Link Binary with Libraries`, press the `+` at the very bottom and add `libInAppUtils.a` from the `node_modules/react-native-in-app-utils/InAppUtils` folder. [(Screenshot)](http://url.brentvatne.ca/17Xfe).
+3. Run `rnpm link react-native-in-app-utils`
 
-4. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;`
+4. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;` or for ES6: `import { InAppUtils } from 'NativeModules'`
 
 
 ## API
@@ -65,8 +65,8 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
 
 | Field                 | Type   | Description                |
 | --------------------- | ------ | -------------------------- |
-| transactionIdentifier | string | The product identifier     |
-| productIdentifier     | string | The transaction identifier |
+| transactionIdentifier | string | The transaction identifier |
+| productIdentifier     | string | The product identifier |
 
 
 ### Restore payments
@@ -86,7 +86,7 @@ InAppUtils.restorePurchases((error, products)=> {
 
 ### Receipts
 
-iTunes receipts are associated to the users iTunes account and can be retrieved without any product reference. 
+iTunes receipts are associated to the users iTunes account and can be retrieved without any product reference.
 
 ```javascript
 InAppUtils.receiptData((error, receiptData)=> {
