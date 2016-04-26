@@ -1,7 +1,7 @@
 #import "InAppUtils.h"
 #import <StoreKit/StoreKit.h>
 #import "RCTLog.h"
-
+#import "RCTUtils.h"
 #import "SKProduct+StringPrice.h"
 
 @implementation InAppUtils
@@ -35,9 +35,7 @@ RCT_EXPORT_MODULE()
                 NSString *key = RCTKeyForInstance(transaction.payment.productIdentifier);
                 RCTResponseSenderBlock callback = _callbacks[key];
                 if (callback) {
-                    if(transaction.error.code != SKErrorPaymentCancelled){
-                        callback(@[@"transaction_failed"]);
-                    }
+                    callback(@[RCTJSErrorFromNSError(transaction.error)]);
                     [_callbacks removeObjectForKey:key];
                 } else {
                     RCTLogWarn(@"No callback registered for transaction with state failed.");
