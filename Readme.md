@@ -59,6 +59,7 @@ InAppUtils.loadProducts(products, (error, products) => {
 ```javascript
 var productIdentifier = 'com.xyz.abc';
 InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
+   // NOTE for v3.0: User can cancel the payment which will be availble as error object here.
    if(response && response.productIdentifier) {
       AlertIOS.alert('Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
       //unlock store here.
