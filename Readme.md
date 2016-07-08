@@ -78,7 +78,7 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
 ### Restore payments
 
 ```javascript
-InAppUtils.restorePurchases((error, products)=> {
+InAppUtils.restorePurchases((error, response)=> {
    if(error) {
       AlertIOS.alert('itunes Error', 'Could not connect to itunes store.');
    } else {
@@ -88,7 +88,17 @@ InAppUtils.restorePurchases((error, products)=> {
 });
 ```
 
-**Response:** An array of product identifiers (as strings).
+**Response:** An array of transactions with the following fields:
+
+**Response fields:**
+
+| Field                 | Type   | Description                |
+| --------------------- | ------ | -------------------------- |
+| originalTransactionIdentifier | string | The original transaction identifier |
+| transactionIdentifier | string | The transaction identifier |
+| productIdentifier     | string | The product identifier |
+
+```
 
 ### Receipts
 
