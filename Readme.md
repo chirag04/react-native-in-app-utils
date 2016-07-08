@@ -90,8 +90,6 @@ InAppUtils.restorePurchases((error, response)=> {
 
 **Response:** An array of transactions with the following fields:
 
-**Response fields:**
-
 | Field                 | Type   | Description                |
 | --------------------- | ------ | -------------------------- |
 | originalTransactionIdentifier | string | The original transaction identifier |
