@@ -96,7 +96,6 @@ InAppUtils.restorePurchases((error, response)=> {
 | transactionIdentifier | string | The transaction identifier |
 | productIdentifier     | string | The product identifier |
 
-```
 
 ### Receipts
 
