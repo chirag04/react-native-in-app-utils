@@ -12,13 +12,11 @@ A react-native wrapper for handling in-app purchases.
 
 ### Add it to your project
 
-1. Run `npm install react-native-in-app-utils --save`.
+1. Make sure you have `rnpm` installed: `npm install rnpm -g`
 
-2. Make sure you have `rnpm` installed: `npm install rnpm -g`
+2. Install with rnpm: `rnpm install react-native-in-app-utils`
 
-3. Run `rnpm link react-native-in-app-utils`
-
-4. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;` 
+3. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;` 
    or for ES6: 
    ```
    import { NativeModules } from 'react-native'
