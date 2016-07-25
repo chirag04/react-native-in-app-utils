@@ -54,7 +54,7 @@ RCT_EXPORT_MODULE()
                     callback(@[[NSNull null], purchase]);
                     [_callbacks removeObjectForKey:key];
                 } else {
-                    RCTLogWarn(@"No callback registered for transaction with state purcahsed.");
+                    RCTLogWarn(@"No callback registered for transaction with state purchased.");
                 }
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
                 break;
