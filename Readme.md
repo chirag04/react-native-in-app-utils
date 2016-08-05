@@ -52,6 +52,8 @@ InAppUtils.loadProducts(products, (error, products) => {
 | description    | string  | Description string                          |
 | title          | string  | Title string                                |
 
+**Troubleshooting:** If you do not get back your product(s) then there's a good chance that something in your iTunes Connect or Xcode is not properly configured. Take a look at this [StackOverflow Answer](http://stackoverflow.com/a/11707704/293280) to determine what might be the issue(s).
+
 ### Buy product
 
 ```javascript
@@ -113,7 +115,7 @@ InAppUtils.receiptData((error, receiptData)=> {
 
 ## Testing
 
-To test your in-app purchases, you have to *run the app on an actual device*. Using the iOS Simulator, they will always fail.
+To test your in-app purchases, you have to *run the app on an actual device*. Using the iOS Simulator, they will always fail as the simulator cannot connect to the iTunes Store. However, you can do certain tasks like using `loadProducts` without the need to run on a real device.
 
 1. Set up a test account ("Sandbox Tester") in iTunes Connect. See the official documentation [here](https://developer.apple.com/library/ios/documentation/LanguagesUtilities/Conceptual/iTunesConnect_Guide/Chapters/SettingUpUserAccounts.html#//apple_ref/doc/uid/TP40011225-CH25-SW9).
 
