@@ -65,6 +65,8 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
 });
 ```
 
+**NOTE:** Call `loadProducts` prior to calling `purchaseProduct`, otherwise this will return `invalid_product`. If you're calling them right after each other, you will need to call `purchaseProduct` inside of the `loadProducts` callback to ensure it has had a chance to complete its call.
+
 **Response fields:**
 
 | Field                 | Type   | Description                |
