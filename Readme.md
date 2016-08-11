@@ -85,7 +85,17 @@ InAppUtils.restorePurchases((error, response)=> {
       AlertIOS.alert('itunes Error', 'Could not connect to itunes store.');
    } else {
       AlertIOS.alert('Restore Successful', 'Successfully restores all your purchases.');
-      //unlock store here again.
+      
+      if (response.length == 0) {
+        Alert.alert('No Purchases', "We didn't find any purchases to restore.");
+        return;
+      }
+
+      response.forEach( function(purchase) {
+        if (purchase.productIdentifier == "com.xyz.abc") {
+          // Handle purchased product.
+        }
+      });
    }
 });
 ```
