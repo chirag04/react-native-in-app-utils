@@ -1,7 +1,7 @@
 #import "InAppUtils.h"
 #import <StoreKit/StoreKit.h>
 #import "RCTLog.h"
-
+#import "RCTUtils.h"
 #import "SKProduct+StringPrice.h"
 
 @implementation InAppUtils
@@ -35,9 +35,7 @@ RCT_EXPORT_MODULE()
                 NSString *key = RCTKeyForInstance(transaction.payment.productIdentifier);
                 RCTResponseSenderBlock callback = _callbacks[key];
                 if (callback) {
-                    if(transaction.error.code != SKErrorPaymentCancelled){
-                        callback(@[@"transaction_failed"]);
-                    }
+                    callback(@[RCTJSErrorFromNSError(transaction.error)]);
                     [_callbacks removeObjectForKey:key];
                 } else {
                     RCTLogWarn(@"No callback registered for transaction with state failed.");
@@ -56,7 +54,7 @@ RCT_EXPORT_MODULE()
                     callback(@[[NSNull null], purchase]);
                     [_callbacks removeObjectForKey:key];
                 } else {
-                    RCTLogWarn(@"No callback registered for transaction with state purcahsed.");
+                    RCTLogWarn(@"No callback registered for transaction with state purchased.");
                 }
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
                 break;
@@ -118,7 +116,13 @@ restoreCompletedTransactionsFailedWithError:(NSError *)error
         NSMutableArray *productsArrayForJS = [NSMutableArray array];
         for(SKPaymentTransaction *transaction in queue.transactions){
             if(transaction.transactionState == SKPaymentTransactionStateRestored) {
-                [productsArrayForJS addObject:transaction.payment.productIdentifier];
+              NSDictionary *purchase = @{
+                @"originalTransactionIdentifier": transaction.originalTransaction.transactionIdentifier,
+                @"transactionIdentifier": transaction.transactionIdentifier,
+                @"productIdentifier": transaction.payment.productIdentifier
+              };
+
+                [productsArrayForJS addObject:purchase];
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
             }
         }
@@ -173,7 +177,13 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
         for(SKProduct *item in response.products) {
             NSDictionary *product = @{
                                       @"identifier": item.productIdentifier,
-                                      @"priceString": item.priceString
+                                      @"price": item.price,
+                                      @"currencySymbol": [item.priceLocale objectForKey:NSLocaleCurrencySymbol],
+                                      @"currencyCode": [item.priceLocale objectForKey:NSLocaleCurrencyCode],
+                                      @"priceString": item.priceString,
+                                      @"downloadable": item.downloadable ? @"true" : @"false" ,
+                                      @"description": item.localizedDescription ? item.localizedDescription : @"",
+                                      @"title": item.localizedTitle ? item.localizedTitle : @"",
                                       };
             [productsArrayForJS addObject:product];
         }

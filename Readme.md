@@ -12,13 +12,16 @@ A react-native wrapper for handling in-app purchases.
 
 ### Add it to your project
 
-1. Run `npm install react-native-in-app-utils --save`.
+1. Make sure you have `rnpm` installed: `npm install rnpm -g`
 
-2. Open your project in XCode, right click on `Libraries`, click `Add Files to "Your Project Name"` and add `InAppUtils.xcodeproj`. (situated in `node_modules/react-native-in-app-utils`) [(This](http://url.brentvatne.ca/jQp8) then [this](http://url.brentvatne.ca/1gqUD), just with InAppUtils).
+2. Install with rnpm: `rnpm install react-native-in-app-utils`
 
-3. Link `libInAppUtils.a` with your Libararies. To do that, click on your project folder, select `Build Phases` in the top bar, scroll to `Link Binary with Libraries`, press the `+` at the very bottom and add `libInAppUtils.a` from the `node_modules/react-native-in-app-utils/InAppUtils` folder. [(Screenshot)](http://url.brentvatne.ca/17Xfe).
-
-4. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;`
+3. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;` 
+   or for ES6: 
+   ```
+   import { NativeModules } from 'react-native'
+   import { InAppUtils } from 'NativeModules'
+   ```
 
 
 ## API
@@ -36,11 +39,27 @@ InAppUtils.loadProducts(products, (error, products) => {
 });
 ```
 
+**Response fields:**
+
+| Field          | Type    | Description                                 |
+| -------------- | ------- | ------------------------------------------- |
+| identifier     | string  | The product identifier                      |
+| price          | number  | The price as a number                       |
+| currencySymbol | string  | The currency symbol, i.e. "$" or "SEK"      |
+| currencyCode   | string  | The currency code, i.e. "USD" of "SEK"      |
+| priceString    | string  | Localised string of price, i.e. "$1,234.00" |
+| downloadable   | boolean | Whether the purchase is downloadable        |
+| description    | string  | Description string                          |
+| title          | string  | Title string                                |
+
+**Troubleshooting:** If you do not get back your product(s) then there's a good chance that something in your iTunes Connect or Xcode is not properly configured. Take a look at this [StackOverflow Answer](http://stackoverflow.com/a/11707704/293280) to determine what might be the issue(s).
+
 ### Buy product
 
 ```javascript
 var productIdentifier = 'com.xyz.abc';
 InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
+   // NOTE for v3.0: User can cancel the payment which will be availble as error object here.
    if(response && response.productIdentifier) {
       AlertIOS.alert('Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
       //unlock store here.
@@ -48,10 +67,20 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
 });
 ```
 
+**NOTE:** Call `loadProducts` prior to calling `purchaseProduct`, otherwise this will return `invalid_product`. If you're calling them right after each other, you will need to call `purchaseProduct` inside of the `loadProducts` callback to ensure it has had a chance to complete its call.
+
+**Response fields:**
+
+| Field                 | Type   | Description                |
+| --------------------- | ------ | -------------------------- |
+| transactionIdentifier | string | The transaction identifier |
+| productIdentifier     | string | The product identifier |
+
+
 ### Restore payments
 
 ```javascript
-InAppUtils.restorePurchases((error, products)=> {
+InAppUtils.restorePurchases((error, response)=> {
    if(error) {
       AlertIOS.alert('itunes Error', 'Could not connect to itunes store.');
    } else {
@@ -61,9 +90,18 @@ InAppUtils.restorePurchases((error, products)=> {
 });
 ```
 
+**Response:** An array of transactions with the following fields:
+
+| Field                 | Type   | Description                |
+| --------------------- | ------ | -------------------------- |
+| originalTransactionIdentifier | string | The original transaction identifier |
+| transactionIdentifier | string | The transaction identifier |
+| productIdentifier     | string | The product identifier |
+
+
 ### Receipts
 
-iTunes receipts are associated to the users iTunes account and can be retrieved without any product reference. 
+iTunes receipts are associated to the users iTunes account and can be retrieved without any product reference.
 
 ```javascript
 InAppUtils.receiptData((error, receiptData)=> {
@@ -74,6 +112,8 @@ InAppUtils.receiptData((error, receiptData)=> {
   }
 });
 ```
+
+**Response:** The receipt as a base64 encoded string.
 
 ### Check if user paid for the app
 
@@ -93,7 +133,7 @@ InAppUtils.paidForApp((error)=> {
 
 ## Testing
 
-To test your in-app purchases, you have to *run the app on an actual device*. Using the iOS Simulator, they will always fail.
+To test your in-app purchases, you have to *run the app on an actual device*. Using the iOS Simulator, they will always fail as the simulator cannot connect to the iTunes Store. However, you can do certain tasks like using `loadProducts` without the need to run on a real device.
 
 1. Set up a test account ("Sandbox Tester") in iTunes Connect. See the official documentation [here](https://developer.apple.com/library/ios/documentation/LanguagesUtilities/Conceptual/iTunesConnect_Guide/Chapters/SettingUpUserAccounts.html#//apple_ref/doc/uid/TP40011225-CH25-SW9).
 
