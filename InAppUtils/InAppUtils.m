@@ -101,7 +101,16 @@ restoreCompletedTransactionsFailedWithError:(NSError *)error
     NSString *key = RCTKeyForInstance(@"restoreRequest");
     RCTResponseSenderBlock callback = _callbacks[key];
     if (callback) {
-        callback(@[@"restore_failed"]);
+        switch (error.code)
+        {
+            case SKErrorPaymentCancelled:
+                callback(@[@"user_cancelled"]);
+                break;
+            default:
+                callback(@[@"restore_failed"]);
+                break;
+        }
+        
         [_callbacks removeObjectForKey:key];
     } else {
         RCTLogWarn(@"No callback registered for restore product request.");
