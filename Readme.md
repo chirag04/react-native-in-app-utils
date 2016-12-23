@@ -16,8 +16,8 @@ A react-native wrapper for handling in-app purchases.
 
 2. Install with rnpm: `rnpm install react-native-in-app-utils`
 
-3. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;` 
-   or for ES6: 
+3. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;`
+   or for ES6:
    ```
    import { NativeModules } from 'react-native'
    import { InAppUtils } from 'NativeModules'
@@ -120,3 +120,28 @@ To test your in-app purchases, you have to *run the app on an actual device*. Us
 2. Run your app on an actual iOS device. To do so, first [run the react-native server on the local network](https://facebook.github.io/react-native/docs/runningondevice.html) instead of localhost. Then connect your iDevice to your Mac via USB and [select it from the list of available devices and simulators](https://i.imgur.com/6ifsu8Q.jpg) in the very top bar. (Next to the build and stop buttons)
 
 3. Open the app and buy something with your Sandbox Tester Apple Account!
+
+## Monthly Subscriptions
+
+You can check if the receipt is still valid using [iap-receipt-validator](https://github.com/sibelius/iap-receipt-validator) package
+
+```jsx
+import iapReceiptValidator from 'iap-receipt-validator';
+
+const password = 'b212549818ff42ecb65aa45c'; // Shared Secret from iTunes connect
+const production = false; // use sandbox or production url for validation
+const validateReceipt = iapReceiptValidator(password, production);
+
+async validate(receiptData) {
+    try {
+        const validationData = await validateReceipt(receiptData);
+
+        // check if Auto-Renewable Subscription is still valid
+        // validationData['latest_receipt_info'][0].expires_date > today
+    } catch(err) {
+        console.log(err.valid, err.error, err.message)
+    }
+}
+```
+
+This works on both react native and backend server, you should setup a cron job that run everyday to check if the receipt is still valid
