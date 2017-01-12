@@ -49,7 +49,8 @@ RCT_EXPORT_MODULE()
                 if (callback) {
                     NSDictionary *purchase = @{
                                               @"transactionIdentifier": transaction.transactionIdentifier,
-                                              @"productIdentifier": transaction.payment.productIdentifier
+                                              @"productIdentifier": transaction.payment.productIdentifier,
+                                              @"transactionReceipt": [[transaction transactionReceipt] base64EncodedStringWithOptions:0]
                                               };
                     callback(@[[NSNull null], purchase]);
                     [_callbacks removeObjectForKey:key];
@@ -119,7 +120,8 @@ restoreCompletedTransactionsFailedWithError:(NSError *)error
               NSDictionary *purchase = @{
                 @"originalTransactionIdentifier": transaction.originalTransaction.transactionIdentifier,
                 @"transactionIdentifier": transaction.transactionIdentifier,
-                @"productIdentifier": transaction.payment.productIdentifier
+                @"productIdentifier": transaction.payment.productIdentifier,
+                @"transactionReceipt": [[transaction transactionReceipt] base64EncodedStringWithOptions:0]
               };
 
                 [productsArrayForJS addObject:purchase];
