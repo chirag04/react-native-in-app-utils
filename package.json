@@ -7,6 +7,7 @@
     "email": "jain_chirag04@yahoo.com",
     "url": "http://chiragjain.tumblr.com"
   },
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git@github.com:chirag04/react-native-in-app-utils.git"
