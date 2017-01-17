@@ -115,7 +115,7 @@ restoreCompletedTransactionsFailedWithError:(NSError *)error
     if (callback) {
         NSMutableArray *productsArrayForJS = [NSMutableArray array];
         for(SKPaymentTransaction *transaction in queue.transactions){
-            if(transaction.transactionState == SKPaymentTransactionStateRestored) {
+            if(transaction.transactionState == SKPaymentTransactionStateRestored && transaction.originalTransaction) {
               NSDictionary *purchase = @{
                 @"originalTransactionIdentifier": transaction.originalTransaction.transactionIdentifier,
                 @"transactionIdentifier": transaction.transactionIdentifier,
