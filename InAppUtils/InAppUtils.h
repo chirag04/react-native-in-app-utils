@@ -1,7 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
 
-#import "RCTBridgeModule.h"
+#import <React/RCTBridgeModule.h>
 
 @interface InAppUtils : NSObject <RCTBridgeModule, SKProductsRequestDelegate, SKPaymentTransactionObserver>
 
