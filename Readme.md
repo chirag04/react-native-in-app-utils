@@ -76,10 +76,11 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
 
 **Response fields:**
 
-| Field                 | Type   | Description                |
-| --------------------- | ------ | -------------------------- |
-| transactionIdentifier | string | The transaction identifier |
-| productIdentifier     | string | The product identifier |
+| Field                 | Type   | Description                                        |
+| --------------------- | ------ | -------------------------------------------------- |
+| transactionIdentifier | string | The transaction identifier                         |
+| productIdentifier     | string | The product identifier                             |
+| transactionReceipt    | string | The transaction receipt as a base64 encoded string |
 
 
 ### Restore payments
@@ -97,11 +98,12 @@ InAppUtils.restorePurchases((error, response)=> {
 
 **Response:** An array of transactions with the following fields:
 
-| Field                 | Type   | Description                |
-| --------------------- | ------ | -------------------------- |
-| originalTransactionIdentifier | string | The original transaction identifier |
-| transactionIdentifier | string | The transaction identifier |
-| productIdentifier     | string | The product identifier |
+| Field                          | Type   | Description                                        |
+| ------------------------------ | ------ | -------------------------------------------------- |
+| originalTransactionIdentifier  | string | The original transaction identifier                |
+| transactionIdentifier          | string | The transaction identifier                         |
+| productIdentifier              | string | The product identifier                             |
+| transactionReceipt             | string | The transaction receipt as a base64 encoded string |
 
 
 ### Receipts
