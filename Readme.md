@@ -2,6 +2,11 @@
 
 A react-native wrapper for handling in-app purchases.
 
+# Breaking Change
+
+- Due to a major breaking change in RN 0.40+, Use v5.x of this lib when installing from npm.
+
+
 # Notes
 
 - You need an Apple Developer account to use in-app purchases.
@@ -71,10 +76,11 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
 
 **Response fields:**
 
-| Field                 | Type   | Description                |
-| --------------------- | ------ | -------------------------- |
-| transactionIdentifier | string | The transaction identifier |
-| productIdentifier     | string | The product identifier |
+| Field                 | Type   | Description                                        |
+| --------------------- | ------ | -------------------------------------------------- |
+| transactionIdentifier | string | The transaction identifier                         |
+| productIdentifier     | string | The product identifier                             |
+| transactionReceipt    | string | The transaction receipt as a base64 encoded string |
 
 
 ### Restore payments
@@ -92,11 +98,12 @@ InAppUtils.restorePurchases((error, response)=> {
 
 **Response:** An array of transactions with the following fields:
 
-| Field                 | Type   | Description                |
-| --------------------- | ------ | -------------------------- |
-| originalTransactionIdentifier | string | The original transaction identifier |
-| transactionIdentifier | string | The transaction identifier |
-| productIdentifier     | string | The product identifier |
+| Field                          | Type   | Description                                        |
+| ------------------------------ | ------ | -------------------------------------------------- |
+| originalTransactionIdentifier  | string | The original transaction identifier                |
+| transactionIdentifier          | string | The transaction identifier                         |
+| productIdentifier              | string | The product identifier                             |
+| transactionReceipt             | string | The transaction receipt as a base64 encoded string |
 
 
 ### Receipts
