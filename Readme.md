@@ -25,7 +25,7 @@ A react-native wrapper for handling in-app purchases.
    or for ES6:
    ```
    import { NativeModules } from 'react-native'
-   import { InAppUtils } from 'NativeModules'
+   const { InAppUtils } = NativeModules
    ```
 
 
