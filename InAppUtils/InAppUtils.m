@@ -48,6 +48,7 @@ RCT_EXPORT_MODULE()
                 RCTResponseSenderBlock callback = _callbacks[key];
                 if (callback) {
                     NSDictionary *purchase = @{
+                                              @"transactionDate": @(transaction.transactionDate.timeIntervalSince1970 * 1000),
                                               @"transactionIdentifier": transaction.transactionIdentifier,
                                               @"productIdentifier": transaction.payment.productIdentifier,
                                               @"transactionReceipt": [[transaction transactionReceipt] base64EncodedStringWithOptions:0]
@@ -122,6 +123,7 @@ restoreCompletedTransactionsFailedWithError:(NSError *)error
                 NSDictionary *purchase = @{
                     @"originalTransactionDate": @(originalTransaction.transactionDate.timeIntervalSince1970 * 1000),
                     @"originalTransactionIdentifier": originalTransaction.transactionIdentifier,
+                    @"transactionDate": @(transaction.transactionDate.timeIntervalSince1970 * 1000),
                     @"transactionIdentifier": transaction.transactionIdentifier,
                     @"productIdentifier": transaction.payment.productIdentifier,
                     @"transactionReceipt": [[transaction transactionReceipt] base64EncodedStringWithOptions:0]
