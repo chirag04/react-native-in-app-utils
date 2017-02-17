@@ -100,6 +100,7 @@ InAppUtils.restorePurchases((error, response)=> {
 
 | Field                          | Type   | Description                                        |
 | ------------------------------ | ------ | -------------------------------------------------- |
+| originalTransactionDate        | number | The original transaction date (ms since epoch)     |
 | originalTransactionIdentifier  | string | The original transaction identifier                |
 | transactionIdentifier          | string | The transaction identifier                         |
 | productIdentifier              | string | The product identifier                             |
