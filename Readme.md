@@ -78,6 +78,7 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
 
 | Field                 | Type   | Description                                        |
 | --------------------- | ------ | -------------------------------------------------- |
+| transactionDate       | number | The transaction date (ms since epoch)              |
 | transactionIdentifier | string | The transaction identifier                         |
 | productIdentifier     | string | The product identifier                             |
 | transactionReceipt    | string | The transaction receipt as a base64 encoded string |
@@ -100,7 +101,9 @@ InAppUtils.restorePurchases((error, response)=> {
 
 | Field                          | Type   | Description                                        |
 | ------------------------------ | ------ | -------------------------------------------------- |
+| originalTransactionDate        | number | The original transaction date (ms since epoch)     |
 | originalTransactionIdentifier  | string | The original transaction identifier                |
+| transactionDate                | number | The transaction date (ms since epoch)              |
 | transactionIdentifier          | string | The transaction identifier                         |
 | productIdentifier              | string | The product identifier                             |
 | transactionReceipt             | string | The transaction receipt as a base64 encoded string |
