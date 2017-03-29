@@ -128,8 +128,8 @@ restoreCompletedTransactionsFailedWithError:(NSError *)error
 
                 SKPaymentTransaction *originalTransaction = transaction.originalTransaction;
                 if (originalTransaction) {
-                    purchase[@"originalTransactionDate"]: @(originalTransaction.transactionDate.timeIntervalSince1970 * 1000),
-                    purchase[@"originalTransactionIdentifier"]: originalTransaction.transactionIdentifier,
+                    purchase[@"originalTransactionDate"] = @(originalTransaction.transactionDate.timeIntervalSince1970 * 1000);
+                    purchase[@"originalTransactionIdentifier"] = originalTransaction.transactionIdentifier;
                 }
 
                 [productsArrayForJS addObject:purchase];
