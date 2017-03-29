@@ -119,12 +119,12 @@ restoreCompletedTransactionsFailedWithError:(NSError *)error
         for(SKPaymentTransaction *transaction in queue.transactions){
             if(transaction.transactionState == SKPaymentTransactionStateRestored) {
 
-                NSMutableDictionary *purchase = @{
+                NSMutableDictionary *purchase = [NSMutableDictionary dictionaryWithDictionary: @{
                     @"transactionDate": @(transaction.transactionDate.timeIntervalSince1970 * 1000),
                     @"transactionIdentifier": transaction.transactionIdentifier,
                     @"productIdentifier": transaction.payment.productIdentifier,
                     @"transactionReceipt": [[transaction transactionReceipt] base64EncodedStringWithOptions:0]
-                };
+                }];
 
                 SKPaymentTransaction *originalTransaction = transaction.originalTransaction;
                 if (originalTransaction) {
