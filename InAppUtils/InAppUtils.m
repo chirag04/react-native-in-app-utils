@@ -118,16 +118,19 @@ restoreCompletedTransactionsFailedWithError:(NSError *)error
         NSMutableArray *productsArrayForJS = [NSMutableArray array];
         for(SKPaymentTransaction *transaction in queue.transactions){
             if(transaction.transactionState == SKPaymentTransactionStateRestored) {
-                SKPaymentTransaction *originalTransaction = transaction.originalTransaction;
 
                 NSDictionary *purchase = @{
-                    @"originalTransactionDate": @(originalTransaction.transactionDate.timeIntervalSince1970 * 1000),
-                    @"originalTransactionIdentifier": originalTransaction.transactionIdentifier,
                     @"transactionDate": @(transaction.transactionDate.timeIntervalSince1970 * 1000),
                     @"transactionIdentifier": transaction.transactionIdentifier,
                     @"productIdentifier": transaction.payment.productIdentifier,
                     @"transactionReceipt": [[transaction transactionReceipt] base64EncodedStringWithOptions:0]
                 };
+
+                SKPaymentTransaction *originalTransaction = transaction.originalTransaction;
+                if (originalTransaction) {
+                    purchase[@"originalTransactionDate"]: @(originalTransaction.transactionDate.timeIntervalSince1970 * 1000),
+                    purchase[@"originalTransactionIdentifier"]: originalTransaction.transactionIdentifier,
+                }
 
                 [productsArrayForJS addObject:purchase];
                 [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
