@@ -23,10 +23,11 @@ A react-native wrapper for handling in-app purchases.
 
 3. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;`
    or for ES6:
-   ```
-   import { NativeModules } from 'react-native'
-   const { InAppUtils } = NativeModules
-   ```
+
+```
+import { NativeModules } from 'react-native'
+const { InAppUtils } = NativeModules
+```
 
 
 ## API
