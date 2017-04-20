@@ -170,3 +170,13 @@ async validate(receiptData) {
 ```
 
 This works on both react native and backend server, you should setup a cron job that run everyday to check if the receipt is still valid
+
+## Free trial period for in-app-purchase
+There is noting to set up related to this library.
+Instead, If you want to set up a free trial period for in-app-purchase, you have to set it up at
+iTunes Connect > your app > your in-app-purchase > free trial period (say 3-days or any period you can find from the pulldown menu)
+
+The flow we know at this point seems to be (auto-renewal case):
+1. FIRST, user have to 'purchase' no matter the free trial period is set or not.
+2. If the app is configured to have a free trial period, THEN user can use the app in that free trial period without being charged.
+3. When the free trial period is over, Apple's system will start to auto-renew user's purchase, therefore user can continue to use the app, but user will be charged from that point on.
