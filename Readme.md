@@ -136,6 +136,22 @@ InAppUtils.receiptData((error, receiptData)=> {
 
 **Response:** The receipt as a base64 encoded string.
 
+### Check if user paid for the app
+
+Check if app was bought or downloaded for free.  This is usefull when converting a paid app to a free app with in-app purchases but still want to give some or all of the features to the users that originally paid for the app.  This code will not work on the simulator.  
+
+Note: this code will prompt the user for their itunes login.
+
+```javascript
+InAppUtils.paidForApp((error)=> {
+  if(error) {
+    // when the app was downloaded, the user didn't pay for it (free or promo code)
+  } else {
+    // the app was paid for when downloaded.
+  }
+});
+```
+
 ## Testing
 
 To test your in-app purchases, you have to *run the app on an actual device*. Using the iOS Simulator, they will always fail as the simulator cannot connect to the iTunes Store. However, you can do certain tasks like using `loadProducts` without the need to run on a real device.
