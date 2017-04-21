@@ -172,7 +172,7 @@ async validate(receiptData) {
 This works on both react native and backend server, you should setup a cron job that run everyday to check if the receipt is still valid
 
 ## Free trial period for in-app-purchase
-There is noting to set up related to this library.
+There is nothing to set up related to this library.
 Instead, If you want to set up a free trial period for in-app-purchase, you have to set it up at
 iTunes Connect > your app > your in-app-purchase > free trial period (say 3-days or any period you can find from the pulldown menu)
 
