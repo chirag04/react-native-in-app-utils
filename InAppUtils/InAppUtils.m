@@ -204,6 +204,13 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
     }
 }
 
+- (void)request:(SKRequest *)request didFailWithError:(NSError *)error
+{
+    NSString *key = RCTKeyForInstance(request);
+    RCTResponseSenderBlock callback = _callbacks[key];
+    callback(@[RCTJSErrorFromNSError(error)]);
+}
+
 - (void)dealloc
 {
     [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
