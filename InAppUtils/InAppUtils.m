@@ -8,6 +8,7 @@
 {
     NSArray *products;
     NSMutableDictionary *_callbacks;
+    SKProductsRequest *productsRequest;
 }
 
 - (instancetype)init
@@ -154,7 +155,7 @@ RCT_EXPORT_METHOD(loadProducts:(NSArray *)productIdentifiers
                   callback:(RCTResponseSenderBlock)callback)
 {
     if([SKPaymentQueue canMakePayments]){
-        SKProductsRequest *productsRequest = [[SKProductsRequest alloc]
+        productsRequest = [[SKProductsRequest alloc]
                                               initWithProductIdentifiers:[NSSet setWithArray:productIdentifiers]];
         productsRequest.delegate = self;
         _callbacks[RCTKeyForInstance(productsRequest)] = callback;
