@@ -164,11 +164,11 @@ RCT_EXPORT_METHOD(loadProducts:(NSArray *)productIdentifiers
     }
 }
 
-RCT_EXPORT_METHOD(canMakePayments callback:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_METHOD(canMakePayments: (RCTResponseSenderBlock)callback)
 {
-    callback(@[SKPaymentQueue canMakePayments])
+    BOOL canMakePayments = [SKPaymentQueue canMakePayments];
+    callback(@[@(canMakePayments)]);
 }
-
 
 RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
 {
