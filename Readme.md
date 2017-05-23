@@ -136,6 +136,23 @@ InAppUtils.receiptData((error, receiptData)=> {
 
 **Response:** The receipt as a base64 encoded string.
 
+### Can make purchases
+
+Check if in-app purchases are enabled/disabled.
+
+```javascript
+InAppUtils.canMakePurchases((enabled) => {
+  if(enabled) {
+    AlertIOS.alert('IAP enabled');
+  } else {
+    AlertIOS.alert('IAP disabled');
+  }
+});
+```
+
+**Response:** The receipt as a base64 encoded string.
+
+
 ## Testing
 
 To test your in-app purchases, you have to *run the app on an actual device*. Using the iOS Simulator, they will always fail as the simulator cannot connect to the iTunes Store. However, you can do certain tasks like using `loadProducts` without the need to run on a real device.
