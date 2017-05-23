@@ -164,6 +164,12 @@ RCT_EXPORT_METHOD(loadProducts:(NSArray *)productIdentifiers
     }
 }
 
+RCT_EXPORT_METHOD(canMakePayments callback:(RCTResponseSenderBlock)callback)
+{
+    callback(@[SKPaymentQueue canMakePayments])
+}
+
+
 RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
 {
     NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
