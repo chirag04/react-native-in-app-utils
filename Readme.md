@@ -17,11 +17,14 @@ A react-native wrapper for handling in-app purchases.
 
 ### Add it to your project
 
-1. Make sure you have `rnpm` installed: `npm install rnpm -g`
+1. Install and link the react-native-in-app-utils package:
 
-2. Install with rnpm: `rnpm install react-native-in-app-utils`
+```
+react-native install react-native-in-app-utils
+react-native link react-native-in-app-utils
+```
 
-3. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;`
+2. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;`
    or for ES6:
 
 ```
@@ -93,7 +96,7 @@ InAppUtils.restorePurchases((error, response)=> {
       AlertIOS.alert('itunes Error', 'Could not connect to itunes store.');
    } else {
       AlertIOS.alert('Restore Successful', 'Successfully restores all your purchases.');
-      
+
       if (response.length == 0) {
         Alert.alert('No Purchases', "We didn't find any purchases to restore.");
         return;
