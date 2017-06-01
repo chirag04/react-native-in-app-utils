@@ -191,6 +191,8 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
         products = [NSMutableArray arrayWithArray:response.products];
         NSMutableArray *productsArrayForJS = [NSMutableArray array];
         for(SKProduct *item in response.products) {
+            if(item.localizedTitle == nil) continue;
+            if(item.localizedDescription == nil) continue;
             NSDictionary *product = @{
                                       @"identifier": item.productIdentifier,
                                       @"price": item.price,
