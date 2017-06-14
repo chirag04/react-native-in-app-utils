@@ -136,12 +136,12 @@ InAppUtils.receiptData((error, receiptData)=> {
 
 **Response:** The receipt as a base64 encoded string.
 
-### Can make purchases
+### Can make payments
 
 Check if in-app purchases are enabled/disabled.
 
 ```javascript
-InAppUtils.canMakePurchases((enabled) => {
+InAppUtils.canMakePayments((enabled) => {
   if(enabled) {
     AlertIOS.alert('IAP enabled');
   } else {
