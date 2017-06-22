@@ -45,7 +45,7 @@ InAppUtils.loadProducts(products, (error, products) => {
 });
 ```
 
-**Response fields:**
+**Response:** An array of product objects with the following fields:
 
 | Field          | Type    | Description                                 |
 | -------------- | ------- | ------------------------------------------- |
@@ -75,7 +75,7 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
 
 **NOTE:** Call `loadProducts` prior to calling `purchaseProduct`, otherwise this will return `invalid_product`. If you're calling them right after each other, you will need to call `purchaseProduct` inside of the `loadProducts` callback to ensure it has had a chance to complete its call.
 
-**Response fields:**
+**Response:** A transaction object with the following fields:
 
 | Field                 | Type   | Description                                        |
 | --------------------- | ------ | -------------------------------------------------- |
@@ -108,7 +108,7 @@ InAppUtils.restorePurchases((error, response)=> {
 });
 ```
 
-**Response:** An array of transactions with the following fields:
+**Response:** An array of transaction objects with the following fields:
 
 | Field                          | Type   | Description                                        |
 | ------------------------------ | ------ | -------------------------------------------------- |
@@ -150,7 +150,7 @@ InAppUtils.canMakePayments((enabled) => {
 });
 ```
 
-**Response:** The receipt as a base64 encoded string.
+**Response:** The enabled boolean flag.
 
 
 ## Testing
