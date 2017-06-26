@@ -210,6 +210,16 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
     }
 }
 
+// SKProductsRequestDelegate network error
+- (void)request:(SKRequest *)request didFailWithError:(NSError *)error{
+    NSString *key = RCTKeyForInstance(request);
+    RCTResponseSenderBlock callback = _callbacks[key];
+    if(callback) {
+        callback(@[RCTJSErrorFromNSError(error)]);
+        [_callbacks removeObjectForKey:key];
+    }
+}
+
 - (void)dealloc
 {
     [[SKPaymentQueue defaultQueue] removeTransactionObserver:self];
