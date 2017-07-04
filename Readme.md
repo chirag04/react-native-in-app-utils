@@ -11,7 +11,7 @@ A react-native wrapper for handling in-app purchases.
 
 - You need an Apple Developer account to use in-app purchases.
 
-- You have to set up your in-app purchases in iTunes Connect first. Follow this [tutorial](http://stackoverflow.com/questions/19556336/how-do-you-add-an-in-app-purchase-to-an-ios-application) for an easy explanation.
+- You have to set up your in-app purchases in iTunes Connect first. Follow steps 1-13 in this [tutorial](http://stackoverflow.com/questions/19556336/how-do-you-add-an-in-app-purchase-to-an-ios-application) for an easy explanation.
 
 - You have to test your in-app purchases on a real device, in-app purchases will always fail on the Simulator.
 
