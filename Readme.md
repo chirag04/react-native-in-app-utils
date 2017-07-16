@@ -67,7 +67,7 @@ var productIdentifier = 'com.xyz.abc';
 InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
    // NOTE for v3.0: User can cancel the payment which will be available as error object here.
    if(response && response.productIdentifier) {
-      AlertIOS.alert('Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
+      Alert.alert('Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
       //unlock store here.
    }
 });
@@ -90,12 +90,12 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
 ```javascript
 InAppUtils.restorePurchases((error, response) => {
    if(error) {
-      AlertIOS.alert('itunes Error', 'Could not connect to itunes store.');
+      Alert.alert('itunes Error', 'Could not connect to itunes store.');
    } else {
-      AlertIOS.alert('Restore Successful', 'Successfully restores all your purchases.');
+      Alert.alert('Restore Successful', 'Successfully restores all your purchases.');
       
       if (response.length === 0) {
-        AlertIOS.alert('No Purchases', "We didn't find any purchases to restore.");
+        Alert.alert('No Purchases', "We didn't find any purchases to restore.");
         return;
       }
 
@@ -127,7 +127,7 @@ iTunes receipts are associated to the users iTunes account and can be retrieved 
 ```javascript
 InAppUtils.receiptData((error, receiptData)=> {
   if(error) {
-    AlertIOS.alert('itunes Error', 'Receipt not found.');
+    Alert.alert('itunes Error', 'Receipt not found.');
   } else {
     //send to validation server
   }
@@ -143,9 +143,9 @@ Check if in-app purchases are enabled/disabled.
 ```javascript
 InAppUtils.canMakePayments((enabled) => {
   if(enabled) {
-    AlertIOS.alert('IAP enabled');
+    Alert.alert('IAP enabled');
   } else {
-    AlertIOS.alert('IAP disabled');
+    Alert.alert('IAP disabled');
   }
 });
 ```
