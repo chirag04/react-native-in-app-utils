@@ -181,9 +181,11 @@ RCT_EXPORT_METHOD(restorePurchasesForUser:(NSString *)username
 {
     NSString *restoreRequest = @"restoreRequest";
     _callbacks[RCTKeyForInstance(restoreRequest)] = callback;
-    if(username) {
-        [[SKPaymentQueue defaultQueue] restoreCompletedTransactionsWithApplicationUsername:username];
+    if(!username) {
+        callback(@[@"no_username"]);
+        return;
     }
+    [[SKPaymentQueue defaultQueue] restoreCompletedTransactionsWithApplicationUsername:username];
 }
 
 RCT_EXPORT_METHOD(loadProducts:(NSArray *)productIdentifiers
