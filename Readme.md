@@ -75,6 +75,9 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
 
 **NOTE:** Call `loadProducts` prior to calling `purchaseProduct`, otherwise this will return `invalid_product`. If you're calling them right after each other, you will need to call `purchaseProduct` inside of the `loadProducts` callback to ensure it has had a chance to complete its call.
 
+**NOTE:** `purchaseProductForUser(productIdentifier, username, callback)` is also available.
+https://stackoverflow.com/questions/29255568/is-there-any-way-to-know-purchase-made-by-which-itunes-account-ios/29280858#29280858
+
 **Response:** A transaction object with the following fields:
 
 | Field                 | Type   | Description                                        |
@@ -107,6 +110,9 @@ InAppUtils.restorePurchases((error, response) => {
    }
 });
 ```
+
+**NOTE:** `restorePurchasesForUser(username, callback)` is also available.
+https://stackoverflow.com/questions/29255568/is-there-any-way-to-know-purchase-made-by-which-itunes-account-ios/29280858#29280858
 
 **Response:** An array of transaction objects with the following fields:
 
