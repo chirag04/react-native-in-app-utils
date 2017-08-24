@@ -54,7 +54,7 @@ InAppUtils.loadProducts(products, (error, products) => {
 | currencySymbol | string  | The currency symbol, i.e. "$" or "SEK"      |
 | currencyCode   | string  | The currency code, i.e. "USD" of "SEK"      |
 | priceString    | string  | Localised string of price, i.e. "$1,234.00" |
-| priceLocale    | string  | Country code of the price, i.e. "GB" or "FR"|
+| countryCode    | string  | Country code of the price, i.e. "GB" or "FR"|
 | downloadable   | boolean | Whether the purchase is downloadable        |
 | description    | string  | Description string                          |
 | title          | string  | Title string                                |
