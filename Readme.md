@@ -54,6 +54,7 @@ InAppUtils.loadProducts(products, (error, products) => {
 | currencySymbol | string  | The currency symbol, i.e. "$" or "SEK"      |
 | currencyCode   | string  | The currency code, i.e. "USD" of "SEK"      |
 | priceString    | string  | Localised string of price, i.e. "$1,234.00" |
+| countryCode    | string  | Country code of the price, i.e. "GB" or "FR"|
 | downloadable   | boolean | Whether the purchase is downloadable        |
 | description    | string  | Description string                          |
 | title          | string  | Title string                                |
@@ -74,6 +75,9 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
 ```
 
 **NOTE:** Call `loadProducts` prior to calling `purchaseProduct`, otherwise this will return `invalid_product`. If you're calling them right after each other, you will need to call `purchaseProduct` inside of the `loadProducts` callback to ensure it has had a chance to complete its call.
+
+**NOTE:** `purchaseProductForUser(productIdentifier, username, callback)` is also available.
+https://stackoverflow.com/questions/29255568/is-there-any-way-to-know-purchase-made-by-which-itunes-account-ios/29280858#29280858
 
 **Response:** A transaction object with the following fields:
 
@@ -107,6 +111,9 @@ InAppUtils.restorePurchases((error, response) => {
    }
 });
 ```
+
+**NOTE:** `restorePurchasesForUser(username, callback)` is also available.
+https://stackoverflow.com/questions/29255568/is-there-any-way-to-know-purchase-made-by-which-itunes-account-ios/29280858#29280858
 
 **Response:** An array of transaction objects with the following fields:
 

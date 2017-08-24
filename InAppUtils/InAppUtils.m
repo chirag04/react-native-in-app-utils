@@ -76,8 +76,22 @@ RCT_EXPORT_MODULE()
     }
 }
 
+RCT_EXPORT_METHOD(purchaseProductForUser:(NSString *)productIdentifier
+                  username:(NSString *)username
+                  callback:(RCTResponseSenderBlock)callback)
+{
+    [self doPurchaseProduct:productIdentifier username:username callback:callback];
+}
+
 RCT_EXPORT_METHOD(purchaseProduct:(NSString *)productIdentifier
                   callback:(RCTResponseSenderBlock)callback)
+{
+    [self doPurchaseProduct:productIdentifier username:nil callback:callback];
+}
+
+- (void) doPurchaseProduct:(NSString *)productIdentifier
+                  username:(NSString *)username
+                  callback:(RCTResponseSenderBlock)callback
 {
     SKProduct *product;
     for(SKProduct *p in products)
@@ -89,7 +103,10 @@ RCT_EXPORT_METHOD(purchaseProduct:(NSString *)productIdentifier
     }
 
     if(product) {
-        SKPayment *payment = [SKPayment paymentWithProduct:product];
+        SKMutablePayment *payment = [SKMutablePayment paymentWithProduct:product];
+        if(username) {
+            payment.applicationUsername = username;
+        }
         [[SKPaymentQueue defaultQueue] addPayment:payment];
         _callbacks[RCTKeyForInstance(payment.productIdentifier)] = callback;
     } else {
@@ -159,6 +176,18 @@ RCT_EXPORT_METHOD(restorePurchases:(RCTResponseSenderBlock)callback)
     [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
 }
 
+RCT_EXPORT_METHOD(restorePurchasesForUser:(NSString *)username
+                    callback:(RCTResponseSenderBlock)callback)
+{
+    NSString *restoreRequest = @"restoreRequest";
+    _callbacks[RCTKeyForInstance(restoreRequest)] = callback;
+    if(!username) {
+        callback(@[@"username_required"]);
+        return;
+    }
+    [[SKPaymentQueue defaultQueue] restoreCompletedTransactionsWithApplicationUsername:username];
+}
+
 RCT_EXPORT_METHOD(loadProducts:(NSArray *)productIdentifiers
                   callback:(RCTResponseSenderBlock)callback)
 {
@@ -206,6 +235,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                                       @"currencySymbol": [item.priceLocale objectForKey:NSLocaleCurrencySymbol],
                                       @"currencyCode": [item.priceLocale objectForKey:NSLocaleCurrencyCode],
                                       @"priceString": item.priceString,
+                                      @"countryCode": [item.priceLocale objectForKey: NSLocaleCountryCode],
                                       @"downloadable": item.downloadable ? @"true" : @"false" ,
                                       @"description": item.localizedDescription ? item.localizedDescription : @"",
                                       @"title": item.localizedTitle ? item.localizedTitle : @"",
