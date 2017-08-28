@@ -35,7 +35,15 @@ RCT_EXPORT_MODULE()
                 NSString *key = RCTKeyForInstance(transaction.payment.productIdentifier);
                 RCTResponseSenderBlock callback = _callbacks[key];
                 if (callback) {
-                    callback(@[RCTJSErrorFromNSError(transaction.error)]);
+                    switch (transaction.error.code)
+                    {
+                        case SKErrorPaymentCancelled:
+                            callback(@[@"user_cancelled"]);
+                            break;
+                        default:
+                            callback(@[RCTJSErrorFromNSError(transaction.error)]);
+                            break;
+                    }
                     [_callbacks removeObjectForKey:key];
                 } else {
                     RCTLogWarn(@"No callback registered for transaction with state failed.");
