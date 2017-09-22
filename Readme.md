@@ -69,7 +69,15 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
    // NOTE for v3.0: User can cancel the payment which will be available as error object here.
    if(response && response.productIdentifier) {
       Alert.alert('Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
+
       //unlock store here.
+
+      // After providing the item, we call finishPurchase to finalize the transaction.
+      InAppUtils.finishPurchase(response.transactionIdentifier, (error) => {
+        if (!error) {
+          // Transaction Complete
+        }
+      });
    }
 });
 ```
