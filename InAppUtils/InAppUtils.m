@@ -191,15 +191,11 @@ RCT_EXPORT_METHOD(restorePurchasesForUser:(NSString *)username
 RCT_EXPORT_METHOD(loadProducts:(NSArray *)productIdentifiers
                   callback:(RCTResponseSenderBlock)callback)
 {
-    if([SKPaymentQueue canMakePayments]){
-        SKProductsRequest *productsRequest = [[SKProductsRequest alloc]
-                                              initWithProductIdentifiers:[NSSet setWithArray:productIdentifiers]];
-        productsRequest.delegate = self;
-        _callbacks[RCTKeyForInstance(productsRequest)] = callback;
-        [productsRequest start];
-    } else {
-        callback(@[@"not_available"]);
-    }
+    SKProductsRequest *productsRequest = [[SKProductsRequest alloc]
+                                          initWithProductIdentifiers:[NSSet setWithArray:productIdentifiers]];
+    productsRequest.delegate = self;
+    _callbacks[RCTKeyForInstance(productsRequest)] = callback;
+    [productsRequest start];
 }
 
 RCT_EXPORT_METHOD(canMakePayments: (RCTResponseSenderBlock)callback)

@@ -61,6 +61,18 @@ InAppUtils.loadProducts(products, (error, products) => {
 
 **Troubleshooting:** If you do not get back your product(s) then there's a good chance that something in your iTunes Connect or Xcode is not properly configured. Take a look at this [StackOverflow Answer](http://stackoverflow.com/a/11707704/293280) to determine what might be the issue(s).
 
+### Checking if payments are allowed
+
+```javascript
+InAppUtils.canMakePayments((canMakePayments) => {
+   if(!canMakePayments) {
+      Alert.alert('Not Allowed', 'This device is not allowed to make purchases. Please check restrictions on device');
+   }
+})
+```
+
+**NOTE:** canMakePayments may return false because of country limitation or parental contol/restriction setup on the device.
+
 ### Buy product
 
 ```javascript
@@ -75,6 +87,8 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
 ```
 
 **NOTE:** Call `loadProducts` prior to calling `purchaseProduct`, otherwise this will return `invalid_product`. If you're calling them right after each other, you will need to call `purchaseProduct` inside of the `loadProducts` callback to ensure it has had a chance to complete its call.
+
+**NOTE:** Call `canMakePurchases` prior to calling `purchaseProduct` to ensure that the user is allowed to make a purchase. It is generally a good idea to inform the user that they are not allowed to make purchases from their account and what they can do about it instead of a cryptic error message from iTunes.
 
 **NOTE:** `purchaseProductForUser(productIdentifier, username, callback)` is also available.
 https://stackoverflow.com/questions/29255568/is-there-any-way-to-know-purchase-made-by-which-itunes-account-ios/29280858#29280858
