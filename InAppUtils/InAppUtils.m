@@ -129,7 +129,7 @@ restoreCompletedTransactionsFailedWithError:(NSError *)error
                 callback(@[@"restore_failed"]);
                 break;
         }
-        
+
         [_callbacks removeObjectForKey:key];
     } else {
         RCTLogWarn(@"No callback registered for restore product request.");
@@ -202,6 +202,13 @@ RCT_EXPORT_METHOD(canMakePayments: (RCTResponseSenderBlock)callback)
 {
     BOOL canMakePayments = [SKPaymentQueue canMakePayments];
     callback(@[@(canMakePayments)]);
+}
+
+RCT_EXPORT_METHOD(hasReceipt:(RCTResponseSenderBlock)callback)
+{
+    NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
+    BOOL hasReceipt = [[NSFileManager defaultManager] fileExistsAtPath:[receiptUrl path]];
+    callback(@[@(hasReceipt)]);
 }
 
 RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)

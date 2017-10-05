@@ -111,7 +111,7 @@ InAppUtils.restorePurchases((error, response) => {
       Alert.alert('itunes Error', 'Could not connect to itunes store.');
    } else {
       Alert.alert('Restore Successful', 'Successfully restores all your purchases.');
-      
+
       if (response.length === 0) {
         Alert.alert('No Purchases', "We didn't find any purchases to restore.");
         return;
@@ -148,6 +148,7 @@ iTunes receipts are associated to the users iTunes account and can be retrieved 
 ```javascript
 InAppUtils.receiptData((error, receiptData)=> {
   if(error) {
+    // Could also advice the user to restore purchases
     Alert.alert('itunes Error', 'Receipt not found.');
   } else {
     //send to validation server
@@ -156,6 +157,26 @@ InAppUtils.receiptData((error, receiptData)=> {
 ```
 
 **Response:** The receipt as a base64 encoded string.
+
+
+### Checking if receipt exists
+
+You can limit user login prompts by checking if the receipt exists before trying to read it.
+Useful if you don't want a prompt for new users
+
+```javascript
+InAppUtils.hasReceipt((exists) => {
+  if(exists) {
+    // Continue with receipt validation before prompting for restoring
+    InAppUtils.receiptData((error, receiptData)=> {
+      //...
+    })
+  }
+});
+```
+
+**Response:** The receipt as a base64 encoded string.
+
 
 ### Can make payments
 
