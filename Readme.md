@@ -175,7 +175,7 @@ InAppUtils.hasReceipt((exists) => {
 });
 ```
 
-**Response:** The receipt as a base64 encoded string.
+**Response:** Exists boolean flag.
 
 
 ### Can make payments
