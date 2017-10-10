@@ -178,7 +178,16 @@ InAppUtils.canMakePayments((enabled) => {
 Can be used for purchases initiated from the App Store or subscription renewals.
 
 ```javascript
-const listener = InAppUtils.addListener('PurchaseCompleted', purchase => {
+import {
+  NativeEventEmitter,
+  NativeModules,
+} from 'react-native';
+
+const { InAppUtils } = NativeModules;
+
+const InAppUtilsEmitter = new NativeEventEmitter(InAppUtils);
+
+const listener = InAppUtilsEmitter.addListener('PurchaseCompleted', purchase => {
   if(purchase && purchase.productIdentifier) {
       Alert.alert('Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
       //unlock store here.
