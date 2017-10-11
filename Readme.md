@@ -189,7 +189,7 @@ const InAppUtilsEmitter = new NativeEventEmitter(InAppUtils);
 
 const listener = InAppUtilsEmitter.addListener('PurchaseCompleted', purchase => {
   if(purchase && purchase.productIdentifier) {
-      Alert.alert('Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
+      Alert.alert('Purchase Successful', 'Your Transaction ID is ' + purchase.transactionIdentifier);
       //unlock store here.
    }
 });
