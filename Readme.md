@@ -64,8 +64,8 @@ InAppUtils.loadProducts(products, (error, products) => {
 ### Checking if payments are allowed
 
 ```javascript
-InAppUtils.canMakePayments((canMakePayments) => {
-   if(!canMakePayments) {
+InAppUtils.canMakePayments((error, enabled) => {
+   if(!enabled) {
       Alert.alert('Not Allowed', 'This device is not allowed to make purchases. Please check restrictions on device');
    }
 })
@@ -165,7 +165,7 @@ InAppUtils.receiptData((error, receiptData)=> {
 Check if in-app purchases are enabled/disabled.
 
 ```javascript
-InAppUtils.canMakePayments((enabled) => {
+InAppUtils.canMakePayments((error, enabled) => {
   if(enabled) {
     Alert.alert('IAP enabled');
   } else {
