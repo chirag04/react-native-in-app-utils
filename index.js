@@ -9,7 +9,12 @@ const { InAppUtils } = NativeModules;
 const InAppUtilsEmitter = new NativeEventEmitter(InAppUtils);
 
 const promisify = fn => (...args) => new Promise((resolve, reject) => {
-  fn(...args, (err, res) => err ? reject(err) : resolve(res));
+  fn(...args, (err, res) => {
+    if (err !== undefined && err instanceof Error) reject(err);
+    // If only one argument is given and it's not an error
+    if (err !== undefined && res === undefined) resolve(err);
+    resolve(res);
+  });
 });
 
 const IAU = Platform.select({
