@@ -128,7 +128,7 @@ RCT_EXPORT_METHOD(purchaseProduct:(NSString *)productIdentifier
         [[SKPaymentQueue defaultQueue] addPayment:payment];
         _callbacks[RCTKeyForInstance(payment.productIdentifier)] = callback;
     } else {
-        callback(@[@"invalid_product"]);
+        callback(@[RCTMakeError(@"invalid_product", nil, nil)]);
     }
 }
 
@@ -141,10 +141,10 @@ restoreCompletedTransactionsFailedWithError:(NSError *)error
         switch (error.code)
         {
             case SKErrorPaymentCancelled:
-                callback(@[@"user_cancelled"]);
+                callback(@[RCTMakeError(@"user_cancelled", nil, nil)]);
                 break;
             default:
-                callback(@[@"restore_failed"]);
+                callback(@[RCTJSErrorFromNSError(error)]);
                 break;
         }
 
@@ -189,7 +189,7 @@ RCT_EXPORT_METHOD(restorePurchasesForUser:(NSString *)username
     NSString *restoreRequest = @"restoreRequest";
     _callbacks[RCTKeyForInstance(restoreRequest)] = callback;
     if(!username) {
-        callback(@[@"username_required"]);
+        callback(@[RCTMakeError(@"username_required", nil, nil)]);
         return;
     }
     [[SKPaymentQueue defaultQueue] restoreCompletedTransactionsWithApplicationUsername:username];
@@ -216,7 +216,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
     NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
     NSData *receiptData = [NSData dataWithContentsOfURL:receiptUrl];
     if (!receiptData) {
-      callback(@[@"not_available"]);
+      callback(@[RCTMakeError(@"receipt_not_available", nil, nil)]);
     } else {
       callback(@[[NSNull null], [receiptData base64EncodedStringWithOptions:0]]);
     }
@@ -275,7 +275,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
         purchase[@"originalTransactionDate"] = @(originalTransaction.transactionDate.timeIntervalSince1970 * 1000);
         purchase[@"originalTransactionIdentifier"] = originalTransaction.transactionIdentifier;
     }
-    
+
     return purchase;
 }
 
