@@ -21,12 +21,11 @@ A react-native wrapper for handling in-app purchases.
 
 2. Install with rnpm: `rnpm install react-native-in-app-utils`
 
-3. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;`
+3. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('react-native-in-app-utils');`
    or for ES6:
 
 ```
-import { NativeModules } from 'react-native'
-const { InAppUtils } = NativeModules
+import InAppUtils from 'react-native-in-app-utils';
 ```
 
 
@@ -181,16 +180,9 @@ InAppUtils.canMakePayments((error, enabled) => {
 Can be used for purchases initiated from the App Store or subscription renewals.
 
 ```javascript
-import {
-  NativeEventEmitter,
-  NativeModules,
-} from 'react-native';
+import InAppUtils from 'react-native-in-app-utils';
 
-const { InAppUtils } = NativeModules;
-
-const InAppUtilsEmitter = new NativeEventEmitter(InAppUtils);
-
-const listener = InAppUtilsEmitter.addListener('PurchaseCompleted', purchase => {
+const listener = InAppUtils.addListener('PurchaseCompleted', purchase => {
   if(purchase && purchase.productIdentifier) {
       Alert.alert('Purchase Successful', 'Your Transaction ID is ' + purchase.transactionIdentifier);
       //unlock store here.
