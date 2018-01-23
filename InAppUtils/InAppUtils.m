@@ -14,6 +14,7 @@
 - (instancetype)init
 {
     if ((self = [super init])) {
+        hasPurchaseCompletedListeners = NO;
         _callbacks = [[NSMutableDictionary alloc] init];
         [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
     }
