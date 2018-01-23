@@ -37,7 +37,7 @@ RCT_EXPORT_MODULE()
 
 - (NSArray<NSString *> *)supportedEvents
 {
-    return @[@"PurchaseCompleted"];
+    return @[@"purchaseCompleted"];
 }
 
 // Transactions initiated from App Store
@@ -72,7 +72,7 @@ shouldAddStorePayment:(SKPayment *)payment
                     callback(@[[NSNull null], purchase]);
                     [_callbacks removeObjectForKey:key];
                 } else if (hasPurchaseCompletedListeners) {
-                    [self sendEventWithName:@"PurchaseCompleted" body:purchase];
+                    [self sendEventWithName:@"purchaseCompleted" body:purchase];
                 } else {
                     RCTLogWarn(@"No callback registered for transaction with state purchased.");
                 }
