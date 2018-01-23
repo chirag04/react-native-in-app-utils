@@ -188,7 +188,7 @@ Can be used for purchases initiated from the App Store or subscription renewals.
 ```javascript
 import InAppUtils from 'react-native-in-app-utils';
 
-const listener = InAppUtils.addListener('PurchaseCompleted', purchase => {
+const listener = InAppUtils.addListener('purchaseCompleted', purchase => {
   if(purchase && purchase.productIdentifier) {
       Alert.alert('Purchase Successful', 'Your Transaction ID is ' + purchase.transactionIdentifier);
       //unlock store here.
