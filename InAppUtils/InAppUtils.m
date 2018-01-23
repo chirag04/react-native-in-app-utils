@@ -44,7 +44,7 @@ RCT_EXPORT_MODULE()
 - (BOOL)paymentQueue:(SKPaymentQueue *)queue
 shouldAddStorePayment:(SKPayment *)payment
           forProduct:(SKProduct *)product {
-    return true;
+    return hasPurchaseCompletedListeners;
 }
 
 - (void)paymentQueue:(SKPaymentQueue *)queue
