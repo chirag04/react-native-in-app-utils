@@ -4,8 +4,7 @@ A react-native wrapper for handling in-app purchases.
 
 # Breaking Change
 
-- Due to a major breaking change in RN 0.40+, Use v5.x of this lib when installing from npm.
-
+- Due to a major breaking change in RN 0.40+, use version 5 or higher of this lib when installing from npm.
 
 # Notes
 
