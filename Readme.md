@@ -187,6 +187,9 @@ InAppUtils.getPromotedProduct((productId) => {
 });
 ```
 
+**NOTE:** The promoted product functions are related to the Promoting Your In-App Purchases feature.
+https://developer.apple.com/app-store/promoting-in-app-purchases/
+
 **Response:** Only returns the promoted product identifier if the user taps on a promoted product, otherwise returns null.
 
 ### Buy promoted product
@@ -237,6 +240,13 @@ To test your in-app purchases, you have to *run the app on an actual device*. Us
 2. Run your app on an actual iOS device. To do so, first [run the react-native server on the local network](https://facebook.github.io/react-native/docs/runningondevice.html) instead of localhost. Then connect your iDevice to your Mac via USB and [select it from the list of available devices and simulators](https://i.imgur.com/6ifsu8Q.jpg) in the very top bar. (Next to the build and stop buttons)
 
 3. Open the app and buy something with your Sandbox Tester Apple Account!
+
+### Testing Promoted In-App Purchases
+To test the promoted in-app purchases you can use this link, fill the bundle id and the product identifier and then open the link on a device:
+`itms-services://?action=purchaseIntent&bundleId=<BUNDLE_ID>&productIdentifier=<PRODUCT_IDENTIFIER>`
+
+Check the documentation here:
+https://developer.apple.com/documentation/storekit/in_app_purchase/testing_promoted_in_app_purchases?language=objc
 
 ## Monthly Subscriptions
 
