@@ -173,6 +173,60 @@ InAppUtils.canMakePayments((enabled) => {
 
 **Response:** The enabled boolean flag.
 
+### Get promoted in-app purchase
+
+Gets the promoted product identifier.
+
+```javascript
+InAppUtils.getPromotedProduct((productId) => {
+if(productId) {
+// Handle promoted product
+} else {
+Alert.alert('No promoted product');
+}
+});
+```
+
+**Response:** Only returns the promoted product identifier if the user taps on a promoted product, otherwise returns null.
+
+### Buy promoted in-app purchase
+
+Initiates the payment process for the promoted product.
+
+```javascript
+InAppUtils.buyPromotedProduct((error, response) => {
+// NOTE for v3.0: User can cancel the payment which will be available as error object here.
+if(response && response.productIdentifier) {
+Alert.alert('Promoted Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
+//unlock store here.
+}
+});
+```
+
+**Response:** A transaction object with the same fields as `buyProduct`.
+
+### Listen to promoted in-app purchase
+
+If the user taps on a promoted product the app wil be opened and an event will be triggered. To listen to this event you need to setup the `NativeEventEmitter`.
+
+Add `NativeEventEmitter` to you import block and create the emitter.
+```
+import { NativeEventEmitter, NativeModules } from 'react-native'
+const { InAppUtils } = NativeModules
+const inAppUtilsEmitter = new NativeEventEmitter(InAppUtils);
+```
+
+Add a listener:
+```javascript
+inAppUtilsEmitter.addListener('OnPromotedProduct', (productId) => {
+// Handle promoted product
+});
+```
+
+**NOTE:** It's worth to check the native event documentation from React Native to understand how the events work:
+https://facebook.github.io/react-native/docs/native-modules-ios.html#sending-events-to-javascript
+
+**Response:** Returns the promoted product identifier.
 
 ## Testing
 
