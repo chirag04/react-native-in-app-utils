@@ -26,9 +26,17 @@ const IAU = Platform.select({
       ? InAppUtils.purchaseProduct(productIdentifier, cb)
       : promisify(InAppUtils.purchaseProduct)(productIdentifier),
 
+    purchaseProductForUser: (productIdentifier, username, cb) => cb
+      ? InAppUtils.purchaseProductForUser(productIdentifier, username, cb)
+      : promisify(InAppUtils.purchaseProductForUser)(productIdentifier, username),
+
     restorePurchases: cb => cb
       ? InAppUtils.restorePurchases(cb)
       : promisify(InAppUtils.restorePurchases)(),
+
+    restorePurchasesForUser: (username, cb) => cb
+      ? InAppUtils.restorePurchasesForUser(username, cb)
+      : promisify(InAppUtils.restorePurchasesForUser)(username),
 
     receiptData: cb => cb
     ? InAppUtils.receiptData(cb)
