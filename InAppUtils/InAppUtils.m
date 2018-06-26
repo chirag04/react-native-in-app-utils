@@ -79,13 +79,22 @@ RCT_EXPORT_METHOD(getPendingPurchases:(RCTResponseSenderBlock)callback)
 {
     NSMutableArray *transactionsArrayForJS = [NSMutableArray array];
     for (SKPaymentTransaction *transaction in [SKPaymentQueue defaultQueue].transactions) {
-        NSMutableDictionary *purchase = [NSMutableDictionary dictionaryWithDictionary: @{
-                                                                                         @"transactionDate": @(transaction.transactionDate.timeIntervalSince1970 * 1000),
-                                                                                         @"transactionIdentifier": transaction.transactionIdentifier,
-                                                                                         @"productIdentifier": transaction.payment.productIdentifier,
-                                                                                         @"transactionReceipt": [[transaction transactionReceipt] base64EncodedStringWithOptions:0],
-                                                                                         @"transactionState": StringForTransactionState(transaction.transactionState)
-                                                                                         }];
+        
+        NSMutableDictionary *purchase = [NSMutableDictionary new];
+        purchase[@"transactionDate"] = @(transaction.transactionDate.timeIntervalSince1970 * 1000);
+        purchase[@"productIdentifier"] = transaction.payment.productIdentifier;
+        purchase[@"transactionState"] = StringForTransactionState(transaction.transactionState);
+        
+        if (transaction.transactionIdentifier != nil) {
+                purchase[@"transactionIdentifier"] = transaction.transactionIdentifier;
+        }
+        
+        NSString *receipt = [[transaction transactionReceipt] base64EncodedStringWithOptions:0];
+
+        if (receipt != nil) {
+            purchase[@"transactionReceipt"] = receipt;
+        }
+
         SKPaymentTransaction *originalTransaction = transaction.originalTransaction;
         if (originalTransaction) {
             purchase[@"originalTransactionDate"] = @(originalTransaction.transactionDate.timeIntervalSince1970 * 1000);
