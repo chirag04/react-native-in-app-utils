@@ -34,7 +34,7 @@ const { InAppUtils } = NativeModules
 You have to load the products first to get the correctly internationalized name and price in the correct currency.
 
 ```javascript
-var identifiers = [
+const identifiers = [
    'com.xyz.abc',
 ];
 InAppUtils.loadProducts(identifiers, (error, products) => {
