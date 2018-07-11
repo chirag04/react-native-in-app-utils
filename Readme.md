@@ -1,12 +1,12 @@
 # `react-native-in-app-utils`
 
-A react-native wrapper for handling in-app purchases.
+A react-native wrapper for handling in-app purchases in iOS.
 
-# Breaking Change
+## Breaking Change
 
 - Due to a major breaking change in RN 0.40+, use version 5 or higher of this lib when installing from npm.
 
-# Notes
+## Notes
 
 - You need an Apple Developer account to use in-app purchases.
 
@@ -14,9 +14,9 @@ A react-native wrapper for handling in-app purchases.
 
 - You have to test your in-app purchases on a real device, in-app purchases will always fail on the Simulator.
 
-### Add it to your project
+## Installation
 
-1.Install with react-native cli `react-native install react-native-in-app-utils`
+1. Install with react-native cli `react-native install react-native-in-app-utils`
 
 2. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;`
    or for ES6:
