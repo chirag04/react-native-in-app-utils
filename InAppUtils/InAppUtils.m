@@ -26,6 +26,18 @@
 
 RCT_EXPORT_MODULE()
 
+- (NSDictionary *)constantsToExport {
+    BOOL isRunningTestFlightBeta;
+    #if TARGET_IPHONE_SIMULATOR
+        isRunningTestFlightBeta = YES;
+    #else
+        NSURL *receiptURL = [[NSBundle mainBundle] appStoreReceiptURL];
+        NSString *receiptURLString = [receiptURL path];
+        isRunningTestFlightBeta =  ([receiptURLString rangeOfString:@"sandboxReceipt"].location != NSNotFound);
+    #endif
+    return @{@"isRunningTestFlightBeta": @(isRunningTestFlightBeta)};
+}
+
 - (void)paymentQueue:(SKPaymentQueue *)queue
  updatedTransactions:(NSArray *)transactions
 {
