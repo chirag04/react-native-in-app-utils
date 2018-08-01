@@ -21,12 +21,17 @@
     return self;
 }
 
--(void)startObserving {
+
+- (void)startObserving {
     hasPurchaseCompletedListeners = YES;
 }
 
--(void)stopObserving {
+- (void)stopObserving {
     hasPurchaseCompletedListeners = NO;
+}
+
++ (BOOL)requiresMainQueueSetup {
+    return NO;
 }
 
 - (dispatch_queue_t)methodQueue
