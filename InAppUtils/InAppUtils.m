@@ -213,6 +213,32 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
         products = [NSMutableArray arrayWithArray:response.products];
         NSMutableArray *productsArrayForJS = [NSMutableArray array];
         for(SKProduct *item in response.products) {
+            NSDictionary *introductoryPrice = nil;
+            NSDictionary *subscriptionPeriod = nil;
+            if (@available(iOS 11.2, *)) {
+                SKProductDiscount *discount = item.introductoryPrice;
+                if (discount) {
+                    introductoryPrice = @{
+                                          @"numberOfPeriods": @(discount.numberOfPeriods),
+                                          @"paymentMode": @(discount.paymentMode),
+                                          @"price" : discount.price,
+                                          @"priceLocale" : discount.priceLocale,
+                                          @"subscriptionPeriod" : @{
+                                                  @"unit" : @(discount.subscriptionPeriod.unit),
+                                                  @"numberOfUnits" : @(discount.subscriptionPeriod.numberOfUnits)
+                                                  }
+                                          };
+                }
+                
+                SKProductSubscriptionPeriod *period = item.subscriptionPeriod;
+                if (period) {
+                    subscriptionPeriod = @{
+                                           @"unit" : @(period.unit),
+                                           @"numberOfUnits" : @(period.numberOfUnits)
+                                           };
+                    
+                }
+            }
             NSDictionary *product = @{
                                       @"identifier": item.productIdentifier,
                                       @"price": item.price,
@@ -223,6 +249,8 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                                       @"downloadable": item.downloadable ? @"true" : @"false" ,
                                       @"description": item.localizedDescription ? item.localizedDescription : @"",
                                       @"title": item.localizedTitle ? item.localizedTitle : @"",
+                                      @"introductoryPrice" : introductoryPrice ? introductoryPrice : [NSNull null],
+                                      @"subscriptionPeriod" : subscriptionPeriod ? subscriptionPeriod : [NSNull null]
                                       };
             [productsArrayForJS addObject:product];
         }
