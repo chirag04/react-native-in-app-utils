@@ -218,16 +218,19 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
             if (@available(iOS 11.2, *)) {
                 SKProductDiscount *discount = item.introductoryPrice;
                 if (discount) {
+                    NSDictionary *introductorySubscriptionPeriod = nil;
+                    if(discount.subscriptionPeriod) {
+                        introductorySubscriptionPeriod = @{
+                                                           @"unit" : @(discount.subscriptionPeriod.unit),
+                                                           @"numberOfUnits" : @(discount.subscriptionPeriod.numberOfUnits)
+                                                           };
+                    }
                     introductoryPrice = @{
                                           @"numberOfPeriods": @(discount.numberOfPeriods),
                                           @"paymentMode": @(discount.paymentMode),
                                           @"price" : discount.price,
-                                          @"priceLocale" : discount.priceLocale,
-                                          @"subscriptionPeriod" : @{
-                                                  @"unit" : @(discount.subscriptionPeriod.unit),
-                                                  @"numberOfUnits" : @(discount.subscriptionPeriod.numberOfUnits)
-                                                  }
-                                          };
+                                          @"subscriptionPeriod" : introductorySubscriptionPeriod
+                                      };
                 }
                 
                 SKProductSubscriptionPeriod *period = item.subscriptionPeriod;
