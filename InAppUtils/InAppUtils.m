@@ -75,6 +75,11 @@ RCT_EXPORT_MODULE()
     }
 }
 
++ (BOOL) requiresMainQueueSetup
+{
+    return YES;
+}
+
 RCT_EXPORT_METHOD(purchaseProductForUser:(NSString *)productIdentifier
                   username:(NSString *)username
                   callback:(RCTResponseSenderBlock)callback)
