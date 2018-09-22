@@ -45,19 +45,46 @@ InAppUtils.loadProducts(identifiers, (error, products) => {
 
 **Response:** An array of product objects with the following fields:
 
-| Field          | Type    | Description                                 |
-| -------------- | ------- | ------------------------------------------- |
-| identifier     | string  | The product identifier                      |
-| price          | number  | The price as a number                       |
-| currencySymbol | string  | The currency symbol, i.e. "$" or "SEK"      |
-| currencyCode   | string  | The currency code, i.e. "USD" of "SEK"      |
-| priceString    | string  | Localised string of price, i.e. "$1,234.00" |
-| countryCode    | string  | Country code of the price, i.e. "GB" or "FR"|
-| downloadable   | boolean | Whether the purchase is downloadable        |
-| description    | string  | Description string                          |
-| title          | string  | Title string                                |
+| Field             | Type    | Description                                 |
+| ----------------- | ------- | ------------------------------------------- |
+| identifier        | string  | The product identifier                      |
+| price             | number  | The price as a number                       |
+| currencySymbol    | string  | The currency symbol, i.e. "$" or "SEK"      |
+| currencyCode      | string  | The currency code, i.e. "USD" of "SEK"      |
+| priceString       | string  | Localised string of price, i.e. "$1,234.00" |
+| countryCode       | string  | Country code of the price, i.e. "GB" or "FR"|
+| downloadable      | boolean | Whether the purchase is downloadable        |
+| description       | string  | Description string                          |
+| title             | string  | Title string                                |
+| introductoryPrice | object  | Introductory price definition (iOS 11.2+)   |
 
 **Troubleshooting:** If you do not get back your product(s) then there's a good chance that something in your iTunes Connect or Xcode is not properly configured. Take a look at this [StackOverflow Answer](http://stackoverflow.com/a/11707704/293280) to determine what might be the issue(s).
+
+#### Introductory Price
+
+If an `SKProduct` returned by the store contains an `SKProductDiscount` it'll be described inside `introductoryPrice` as follows:
+
+| Field              | Type    | Description                                         |
+| ------------------ | ------- | --------------------------------------------------- |
+| price              | number  | The price as a number                               |
+| numberOfPeriods    | number  | Number of periods the product discount is available |
+| paymentMode        | string  | The payment mode for this product discount          |
+| subscriptionPeriod | object  | Defines the period for the product discount         |
+
+Where `paymentMode` can be any of `['freeTrial', 'payAsYouGo', 'payUpFront', 'unavailable']`.
+
+And `subscriptionPeriod` contains:
+
+| Field              | Type    | Description                                                       |
+| ------------------ | ------- | ----------------------------------------------------------------- |
+| unit               | string  | The number of units per subscription period                       |
+| numberOfUnits      | number  | The increment of time that a subscription period is specified in. |
+
+Where `numberOfUnits` can be any of `['day', 'week', 'month', 'year', 'unavailable']`;
+
+If the product has no `SKProductDiscount` associated, `introductoryPrice` will be set to `null`.
+
+**Note:** Introductory Price is only available in iOS 11.2+, if ran in another version `introductoryPrice` will be set to `null`.
 
 ### Checking if payments are allowed
 
