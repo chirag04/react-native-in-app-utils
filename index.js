@@ -39,8 +39,20 @@ const IAU = Platform.select({
       : promisify(InAppUtils.restorePurchasesForUser)(username),
 
     receiptData: cb => cb
-    ? InAppUtils.receiptData(cb)
-    : promisify(InAppUtils.receiptData)(),
+      ? InAppUtils.receiptData(cb)
+      : promisify(InAppUtils.receiptData)(),
+
+    shouldFinishTransactions: (finishTransactions, cb) => cb
+      ? InAppUtils.shouldFinishTransactions(finishTransactions, cb)
+      : promisify(InAppUtils.shouldFinishTransactions)(finishTransactions),
+
+    finishCurrentTransaction: cb => cb
+      ? InAppUtils.finishCurrentTransaction(cb)
+      : promisify(InAppUtils.finishCurrentTransaction)(),
+
+    clearCompletedTransactions: cb => cb
+      ? InAppUtils.clearCompletedTransactions(cb)
+      : promisify(InAppUtils.clearCompletedTransactions)(),
 
     addListener: (...args) => InAppUtilsEmitter.addListener(...args),
   },

@@ -211,6 +211,50 @@ listener.remove();
 | productIdentifier     | string | The product identifier                             |
 | transactionReceipt    | string | The transaction receipt as a base64 encoded string |
 
+### Helpers
+
+```javascript
+// Accepts a boolean.
+// Transactions are (by default) automatically finished unless you call this method before the purchase.
+InAppUtils.shouldFinishTransactions(false)
+
+// Clears current transaction from queue.
+// If you call InAppUtils.shouldFinishTransactions(false) before a purchase,
+// make sure to call InAppUtils.finishCurrentTransaction() after you are done with
+// the purchase data.
+InAppUtils.finishCurrentTransaction()
+
+// Clears all transactions (that are not in a purchasing state) from queue.
+// Be carefull when you call this, especially if you are listening for purchases initiated
+// from the App Store. You might mistakenly clear these transactions.
+// Avoid calling this method on app start.
+InAppUtils.clearCompletedTransactions()
+```
+
+You should not need to use these helpers unless you are having any of the following issues or you know what you are doing:
+
+#### If users gets charged but product does not get unlocked or subscription does not get stored, then try this:
+
+```js
+await InAppUtils.shouldFinishTransactions(false)
+const purchase = await InAppUtils.purchaseProduct(...)
+
+// Here you can unlock product or save subscription...
+
+await InAppUtils.finishCurrentTransaction()
+await InAppUtils.shouldFinishTransactions(true)
+```
+
+#### Sometimes queues are not resolved and subsequent purchases fail. Then try this:
+
+```js
+// Don't call InAppUtils.clearCompletedTransactions() on app start
+// Call it just before user initiates a purchase
+await InAppUtils.clearCompletedTransactions()
+const purchase = await InAppUtils.purchaseProduct(...)
+```
+
+
 ## Testing
 
 To test your in-app purchases, you have to *run the app on an actual device*. Using the iOS Simulator, they will always fail as the simulator cannot connect to the iTunes Store. However, you can do certain tasks like using `loadProducts` without the need to run on a real device.
