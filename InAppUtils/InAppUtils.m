@@ -245,7 +245,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
     }
 }
 
-RCT_EXPORT_METHOD(shouldFinishTransactions:(BOOL *)finishTransactions
+RCT_EXPORT_METHOD(shouldFinishTransactions:(BOOL)finishTransactions
                   callback:(RCTResponseSenderBlock)callback) {
     shouldFinishTransactions = finishTransactions;
     callback(@[[NSNull null]]);
