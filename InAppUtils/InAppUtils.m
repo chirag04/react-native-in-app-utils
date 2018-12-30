@@ -83,10 +83,12 @@ shouldAddStorePayment:(SKPayment *)payment
                 if (callback) {
                     callback(@[[NSNull null], purchase]);
                     [_callbacks removeObjectForKey:key];
-                } else if (hasPurchaseCompletedListeners) {
+                }
+                if (hasPurchaseCompletedListeners) {
                     [self sendEventWithName:@"purchaseCompleted" body:purchase];
-                } else {
-                    RCTLogWarn(@"No callback registered for transaction with state purchased.");
+                }
+                if (!callback && !hasPurchaseCompletedListeners) {
+                    RCTLogWarn(@"No callback or listener registered for transaction with state purchased.");
                 }
                 [self finishTransaction:transaction];
                 break;
