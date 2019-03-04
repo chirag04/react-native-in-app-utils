@@ -90,7 +90,7 @@ shouldAddStorePayment:(SKPayment *)payment
                 if (!callback && !hasPurchaseCompletedListeners) {
                     RCTLogWarn(@"No callback or listener registered for transaction with state purchased.");
                 }
-                [self finishTransaction:transaction];
+               [self finishTransaction:transaction];
                 break;
             }
             case SKPaymentTransactionStateRestored:
@@ -249,6 +249,20 @@ RCT_EXPORT_METHOD(shouldFinishTransactions:(BOOL)finishTransactions
                   callback:(RCTResponseSenderBlock)callback) {
     shouldFinishTransactions = finishTransactions;
     callback(@[[NSNull null]]);
+}
+
+RCT_EXPORT_METHOD(getPurchaseTransactions:(RCTResponseSenderBlock)callback) {
+    NSArray *transactions = [[SKPaymentQueue defaultQueue] transactions];
+    NSMutableArray *purchasedTransactions = [NSMutableArray array];
+    for (int k = 0; k < transactions.count; k++) {
+        SKPaymentTransaction *transaction = transactions[k];
+        if (transaction.transactionState == SKPaymentTransactionStatePurchased) {
+            NSDictionary *purchase = [self getPurchaseData:transaction];
+            [purchasedTransactions addObject:purchase];
+            [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+        }
+    }
+    callback(@[[NSNull null], purchasedTransactions]);
 }
 
 RCT_EXPORT_METHOD(finishCurrentTransaction:(RCTResponseSenderBlock)callback) {
