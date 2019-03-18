@@ -1,13 +1,12 @@
 # `react-native-in-app-utils`
 
-A react-native wrapper for handling in-app purchases.
+A react-native wrapper for handling in-app purchases in iOS.
 
-# Breaking Change
+## Breaking Change
 
-- Due to a major breaking change in RN 0.40+, Use v5.x of this lib when installing from npm.
+- Due to a major breaking change in RN 0.40+, use version 5 or higher of this lib when installing from npm.
 
-
-# Notes
+## Notes
 
 - You need an Apple Developer account to use in-app purchases.
 
@@ -15,13 +14,11 @@ A react-native wrapper for handling in-app purchases.
 
 - You have to test your in-app purchases on a real device, in-app purchases will always fail on the Simulator.
 
-### Add it to your project
+## Installation
 
-1. Make sure you have `rnpm` installed: `npm install rnpm -g`
+1. Install with react-native cli `react-native install react-native-in-app-utils`
 
-2. Install with rnpm: `rnpm install react-native-in-app-utils`
-
-3. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;`
+2. Whenever you want to use it within React code now you just have to do: `var InAppUtils = require('NativeModules').InAppUtils;`
    or for ES6:
 
 ```
@@ -37,10 +34,11 @@ const { InAppUtils } = NativeModules
 You have to load the products first to get the correctly internationalized name and price in the correct currency.
 
 ```javascript
-var products = [
+const identifiers = [
    'com.xyz.abc',
 ];
-InAppUtils.loadProducts(products, (error, products) => {
+InAppUtils.loadProducts(identifiers, (error, products) => {
+   console.log(products);
    //update store here.
 });
 ```
@@ -60,6 +58,18 @@ InAppUtils.loadProducts(products, (error, products) => {
 | title          | string  | Title string                                |
 
 **Troubleshooting:** If you do not get back your product(s) then there's a good chance that something in your iTunes Connect or Xcode is not properly configured. Take a look at this [StackOverflow Answer](http://stackoverflow.com/a/11707704/293280) to determine what might be the issue(s).
+
+### Checking if payments are allowed
+
+```javascript
+InAppUtils.canMakePayments((canMakePayments) => {
+   if(!canMakePayments) {
+      Alert.alert('Not Allowed', 'This device is not allowed to make purchases. Please check restrictions on device');
+   }
+})
+```
+
+**NOTE:** canMakePayments may return false because of country limitation or parental contol/restriction setup on the device.
 
 ### Buy product
 
@@ -84,6 +94,8 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
 
 **NOTE:** Call `loadProducts` prior to calling `purchaseProduct`, otherwise this will return `invalid_product`. If you're calling them right after each other, you will need to call `purchaseProduct` inside of the `loadProducts` callback to ensure it has had a chance to complete its call.
 
+**NOTE:** Call `canMakePurchases` prior to calling `purchaseProduct` to ensure that the user is allowed to make a purchase. It is generally a good idea to inform the user that they are not allowed to make purchases from their account and what they can do about it instead of a cryptic error message from iTunes.
+
 **NOTE:** `purchaseProductForUser(productIdentifier, username, callback)` is also available.
 https://stackoverflow.com/questions/29255568/is-there-any-way-to-know-purchase-made-by-which-itunes-account-ios/29280858#29280858
 
@@ -91,11 +103,14 @@ https://stackoverflow.com/questions/29255568/is-there-any-way-to-know-purchase-m
 
 | Field                 | Type   | Description                                        |
 | --------------------- | ------ | -------------------------------------------------- |
+| originalTransactionDate        | number | The original transaction date (ms since epoch)     |
+| originalTransactionIdentifier  | string | The original transaction identifier                |
 | transactionDate       | number | The transaction date (ms since epoch)              |
 | transactionIdentifier | string | The transaction identifier                         |
 | productIdentifier     | string | The product identifier                             |
 | transactionReceipt    | string | The transaction receipt as a base64 encoded string |
 
+**NOTE:**  `originalTransactionDate` and `originalTransactionIdentifier` are only available for subscriptions that were previously cancelled or expired.
 
 ## Check for any pending transactions
 
