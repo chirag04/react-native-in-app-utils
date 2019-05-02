@@ -316,6 +316,9 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
             
             NSDictionary *introductoryPrice = @{
                                                 @"price": product.introductoryPrice.price,
+                                                @"currencySymbol": [product.introductoryPrice.priceLocale objectForKey:NSLocaleCurrencySymbol],
+                                                @"currencyCode": [product.introductoryPrice.priceLocale objectForKey:NSLocaleCurrencyCode],
+                                                @"countryCode": [product.introductoryPrice.priceLocale objectForKey: NSLocaleCountryCode],
                                                 @"numberOfPeriods": [[NSNumber alloc] initWithLong:product.introductoryPrice.numberOfPeriods],
                                                 @"paymentMode": paymentMode,
                                                 @"subscriptionPeriod": subscriptionPeriod,
