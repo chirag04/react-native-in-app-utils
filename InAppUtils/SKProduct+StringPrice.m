@@ -1,6 +1,5 @@
 #import "SKProduct+StringPrice.h"
 
-
 @implementation SKProduct (StringPrice)
 
 - (NSString *)priceString {
