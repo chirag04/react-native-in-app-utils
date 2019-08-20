@@ -1,7 +1,7 @@
 #import "InAppUtils.h"
 #import <StoreKit/StoreKit.h>
-#import <React/RCTLog.h>
-#import <React/RCTUtils.h>
+#import "RCTLog.h"
+#import "RCTUtils.h"
 #import "SKProduct+StringPrice.h"
 
 @implementation InAppUtils
