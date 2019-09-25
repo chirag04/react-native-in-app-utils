@@ -238,7 +238,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
 {
     NSString *receipt = [self grandUnifiedReceipt];
     if (receipt == nil) {
-        callback(@[@"not_available"]);
+        callback(@[RCTMakeError(@"receipt_not_available", nil, nil)]);
     } else {
         callback(@[[NSNull null], receipt]);
     }
