@@ -26,7 +26,6 @@ import { NativeModules } from 'react-native'
 const { InAppUtils } = NativeModules
 ```
 
-
 ## API
 
 ### Loading products
@@ -34,39 +33,71 @@ const { InAppUtils } = NativeModules
 You have to load the products first to get the correctly internationalized name and price in the correct currency.
 
 ```javascript
-const identifiers = [
-   'com.xyz.abc',
-];
+const identifiers = ["com.xyz.abc"];
 InAppUtils.loadProducts(identifiers, (error, products) => {
-   console.log(products);
-   //update store here.
+  console.log(products);
+  //update store here.
 });
 ```
 
 **Response:** An array of product objects with the following fields:
 
-| Field          | Type    | Description                                 |
-| -------------- | ------- | ------------------------------------------- |
-| identifier     | string  | The product identifier                      |
-| price          | number  | The price as a number                       |
-| currencySymbol | string  | The currency symbol, i.e. "$" or "SEK"      |
-| currencyCode   | string  | The currency code, i.e. "USD" of "SEK"      |
-| priceString    | string  | Localised string of price, i.e. "$1,234.00" |
-| countryCode    | string  | Country code of the price, i.e. "GB" or "FR"|
-| downloadable   | boolean | Whether the purchase is downloadable        |
-| description    | string  | Description string                          |
-| title          | string  | Title string                                |
+| Field             | Type    | Description                                  |
+| ----------------- | ------- | -------------------------------------------- |
+| identifier        | string  | The product identifier                       |
+| price             | number  | The price as a number                        |
+| currencySymbol    | string  | The currency symbol, i.e. "\$" or "SEK"      |
+| currencyCode      | string  | The currency code, i.e. "USD" of "SEK"       |
+| priceString       | string  | Localised string of price, i.e. "\$1,234.00" |
+| countryCode       | string  | Country code of the price, i.e. "GB" or "FR" |
+| downloadable      | boolean | Whether the purchase is downloadable         |
+| description       | string  | Description string                           |
+| title             | string  | Title string                                 |
+| introductoryPrice | object  | Introductory price definition (iOS 11.2+)    |
 
 **Troubleshooting:** If you do not get back your product(s) then there's a good chance that something in your iTunes Connect or Xcode is not properly configured. Take a look at this [StackOverflow Answer](http://stackoverflow.com/a/11707704/293280) to determine what might be the issue(s).
+
+#### Introductory Price
+
+If an `SKProduct` returned by the store contains an `SKProductDiscount` it'll be described inside `introductoryPrice` as follows:
+
+| Field              | Type   | Description                                         |
+| ------------------ | ------ | --------------------------------------------------- |
+| price              | number | The price as a number                               |
+| currencySymbol     | string | The currency symbol, i.e. "\$" or "SEK"             |
+| currencyCode       | string | The currency code, i.e. "USD" of "SEK"              |
+| countryCode        | string | Country code of the price, i.e. "GB" or "FR"        |
+| priceString        | string | Localised string of price, i.e. "\$1,234.00"        |
+| numberOfPeriods    | number | Number of periods the product discount is available |
+| paymentMode        | string | The payment mode for this product discount          |
+| subscriptionPeriod | object | Defines the period for the product discount         |
+
+Where `paymentMode` can be any of `['freeTrial', 'payAsYouGo', 'payUpFront', 'unavailable']`.
+
+And `subscriptionPeriod` contains:
+
+| Field         | Type   | Description                                                       |
+| ------------- | ------ | ----------------------------------------------------------------- |
+| unit          | string | The number of units per subscription period                       |
+| numberOfUnits | number | The increment of time that a subscription period is specified in. |
+
+Where `numberOfUnits` can be any of `['day', 'week', 'month', 'year', 'unavailable']`;
+
+If the product has no `SKProductDiscount` associated, `introductoryPrice` will be set to `null`.
+
+**Note:** Introductory Price is only available in iOS 11.2+, if ran in another version `introductoryPrice` will be set to `null`.
 
 ### Checking if payments are allowed
 
 ```javascript
-InAppUtils.canMakePayments((canMakePayments) => {
-   if(!canMakePayments) {
-      Alert.alert('Not Allowed', 'This device is not allowed to make purchases. Please check restrictions on device');
-   }
-})
+InAppUtils.canMakePayments(canMakePayments => {
+  if (!canMakePayments) {
+    Alert.alert(
+      "Not Allowed",
+      "This device is not allowed to make purchases. Please check restrictions on device"
+    );
+  }
+});
 ```
 
 **NOTE:** canMakePayments may return false because of country limitation or parental contol/restriction setup on the device.
@@ -74,13 +105,16 @@ InAppUtils.canMakePayments((canMakePayments) => {
 ### Buy product
 
 ```javascript
-var productIdentifier = 'com.xyz.abc';
+var productIdentifier = "com.xyz.abc";
 InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
-   // NOTE for v3.0: User can cancel the payment which will be available as error object here.
-   if(response && response.productIdentifier) {
-      Alert.alert('Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
-      //unlock store here.
-   }
+  // NOTE for v3.0: User can cancel the payment which will be available as error object here.
+  if (response && response.productIdentifier) {
+    Alert.alert(
+      "Purchase Successful",
+      "Your Transaction ID is " + response.transactionIdentifier
+    );
+    //unlock store here.
+  }
 });
 ```
 
@@ -93,37 +127,40 @@ https://stackoverflow.com/questions/29255568/is-there-any-way-to-know-purchase-m
 
 **Response:** A transaction object with the following fields:
 
-| Field                 | Type   | Description                                        |
-| --------------------- | ------ | -------------------------------------------------- |
-| originalTransactionDate        | number | The original transaction date (ms since epoch)     |
-| originalTransactionIdentifier  | string | The original transaction identifier                |
-| transactionDate       | number | The transaction date (ms since epoch)              |
-| transactionIdentifier | string | The transaction identifier                         |
-| productIdentifier     | string | The product identifier                             |
-| transactionReceipt    | string | The transaction receipt as a base64 encoded string |
+| Field                         | Type   | Description                                        |
+| ----------------------------- | ------ | -------------------------------------------------- |
+| originalTransactionDate       | number | The original transaction date (ms since epoch)     |
+| originalTransactionIdentifier | string | The original transaction identifier                |
+| transactionDate               | number | The transaction date (ms since epoch)              |
+| transactionIdentifier         | string | The transaction identifier                         |
+| productIdentifier             | string | The product identifier                             |
+| transactionReceipt            | string | The transaction receipt as a base64 encoded string |
 
-**NOTE:**  `originalTransactionDate` and `originalTransactionIdentifier` are only available for subscriptions that were previously cancelled or expired.
+**NOTE:** `originalTransactionDate` and `originalTransactionIdentifier` are only available for subscriptions that were previously cancelled or expired.
 
 ### Restore payments
 
 ```javascript
 InAppUtils.restorePurchases((error, response) => {
-   if(error) {
-      Alert.alert('itunes Error', 'Could not connect to itunes store.');
-   } else {
-      Alert.alert('Restore Successful', 'Successfully restores all your purchases.');
-      
-      if (response.length === 0) {
-        Alert.alert('No Purchases', "We didn't find any purchases to restore.");
-        return;
-      }
+  if (error) {
+    Alert.alert("itunes Error", "Could not connect to itunes store.");
+  } else {
+    Alert.alert(
+      "Restore Successful",
+      "Successfully restores all your purchases."
+    );
 
-      response.forEach((purchase) => {
-        if (purchase.productIdentifier === 'com.xyz.abc') {
-          // Handle purchased product.
-        }
-      });
-   }
+    if (response.length === 0) {
+      Alert.alert("No Purchases", "We didn't find any purchases to restore.");
+      return;
+    }
+
+    response.forEach(purchase => {
+      if (purchase.productIdentifier === "com.xyz.abc") {
+        // Handle purchased product.
+      }
+    });
+  }
 });
 ```
 
@@ -132,24 +169,23 @@ https://stackoverflow.com/questions/29255568/is-there-any-way-to-know-purchase-m
 
 **Response:** An array of transaction objects with the following fields:
 
-| Field                          | Type   | Description                                        |
-| ------------------------------ | ------ | -------------------------------------------------- |
-| originalTransactionDate        | number | The original transaction date (ms since epoch)     |
-| originalTransactionIdentifier  | string | The original transaction identifier                |
-| transactionDate                | number | The transaction date (ms since epoch)              |
-| transactionIdentifier          | string | The transaction identifier                         |
-| productIdentifier              | string | The product identifier                             |
-| transactionReceipt             | string | The transaction receipt as a base64 encoded string |
-
+| Field                         | Type   | Description                                        |
+| ----------------------------- | ------ | -------------------------------------------------- |
+| originalTransactionDate       | number | The original transaction date (ms since epoch)     |
+| originalTransactionIdentifier | string | The original transaction identifier                |
+| transactionDate               | number | The transaction date (ms since epoch)              |
+| transactionIdentifier         | string | The transaction identifier                         |
+| productIdentifier             | string | The product identifier                             |
+| transactionReceipt            | string | The transaction receipt as a base64 encoded string |
 
 ### Receipts
 
 iTunes receipts are associated to the users iTunes account and can be retrieved without any product reference.
 
 ```javascript
-InAppUtils.receiptData((error, receiptData)=> {
-  if(error) {
-    Alert.alert('itunes Error', 'Receipt not found.');
+InAppUtils.receiptData((error, receiptData) => {
+  if (error) {
+    Alert.alert("itunes Error", "Receipt not found.");
   } else {
     //send to validation server
   }
@@ -163,21 +199,20 @@ InAppUtils.receiptData((error, receiptData)=> {
 Check if in-app purchases are enabled/disabled.
 
 ```javascript
-InAppUtils.canMakePayments((enabled) => {
-  if(enabled) {
-    Alert.alert('IAP enabled');
+InAppUtils.canMakePayments(enabled => {
+  if (enabled) {
+    Alert.alert("IAP enabled");
   } else {
-    Alert.alert('IAP disabled');
+    Alert.alert("IAP disabled");
   }
 });
 ```
 
 **Response:** The enabled boolean flag.
 
-
 ## Testing
 
-To test your in-app purchases, you have to *run the app on an actual device*. Using the iOS Simulator, they will always fail as the simulator cannot connect to the iTunes Store. However, you can do certain tasks like using `loadProducts` without the need to run on a real device.
+To test your in-app purchases, you have to _run the app on an actual device_. Using the iOS Simulator, they will always fail as the simulator cannot connect to the iTunes Store. However, you can do certain tasks like using `loadProducts` without the need to run on a real device.
 
 1. Set up a test account ("Sandbox Tester") in iTunes Connect. See the official documentation [here](https://developer.apple.com/library/ios/documentation/LanguagesUtilities/Conceptual/iTunesConnect_Guide/Chapters/SettingUpUserAccounts.html#//apple_ref/doc/uid/TP40011225-CH25-SW9).
 
@@ -211,11 +246,13 @@ async validate(receiptData) {
 This works on both react native and backend server, you should setup a cron job that run everyday to check if the receipt is still valid
 
 ## Free trial period for in-app-purchase
+
 There is nothing to set up related to this library.
 Instead, If you want to set up a free trial period for in-app-purchase, you have to set it up at
 iTunes Connect > your app > your in-app-purchase > free trial period (say 3-days or any period you can find from the pulldown menu)
 
 The flow we know at this point seems to be (auto-renewal case):
+
 1. FIRST, user have to 'purchase' no matter the free trial period is set or not.
 2. If the app is configured to have a free trial period, THEN user can use the app in that free trial period without being charged.
 3. When the free trial period is over, Apple's system will start to auto-renew user's purchase, therefore user can continue to use the app, but user will be charged from that point on.

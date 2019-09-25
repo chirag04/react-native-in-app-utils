@@ -1,6 +1,6 @@
-#import "SKProduct+StringPrice.h"
+#import "SKProductDiscount+StringPrice.h"
 
-@implementation SKProduct (StringPrice)
+@implementation SKProductDiscount (StringPrice)
 
 - (NSString *)priceString {
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
