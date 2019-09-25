@@ -174,6 +174,63 @@ InAppUtils.canMakePayments((enabled) => {
 
 **Response:** The enabled boolean flag.
 
+### Get promoted product
+
+Gets the promoted product identifier.
+
+```javascript
+InAppUtils.getPromotedProduct((productId) => {
+   if(productId) {
+      // Handle promoted product
+   } else {
+      Alert.alert('No promoted product');
+   }
+});
+```
+
+**NOTE:** The promoted product functions are related to the Promoting Your In-App Purchases feature.
+https://developer.apple.com/app-store/promoting-in-app-purchases/
+
+**Response:** Only returns the promoted product identifier if the user taps on a promoted product, otherwise returns null.
+
+### Buy promoted product
+
+Initiates the payment process for the promoted product.
+
+```javascript
+InAppUtils.buyPromotedProduct((error, response) => {
+   // NOTE for v3.0: User can cancel the payment which will be available as error object here.
+   if(response && response.productIdentifier) {
+      Alert.alert('Promoted Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
+      //unlock store here.
+   }
+});
+```
+
+**Response:** A transaction object with the same fields as `buyProduct`.
+
+### Listen to promoted product
+
+If the user taps on a promoted product the app wil be opened and an event will be triggered. To listen to this event you need to setup the `NativeEventEmitter`.
+
+Add `NativeEventEmitter` to you import block and create the emitter.
+```
+import { NativeEventEmitter, NativeModules } from 'react-native'
+const { InAppUtils } = NativeModules
+const inAppUtilsEmitter = new NativeEventEmitter(InAppUtils);
+```
+
+Add a listener:
+```javascript
+inAppUtilsEmitter.addListener('OnPromotedProduct', (productId) => {
+   // Handle promoted product
+});
+```
+
+**NOTE:** It's worth to check the native event documentation from React Native to understand how the events work:
+https://facebook.github.io/react-native/docs/native-modules-ios.html#sending-events-to-javascript
+
+**Response:** Returns the promoted product identifier.
 
 ## Testing
 
@@ -184,6 +241,13 @@ To test your in-app purchases, you have to *run the app on an actual device*. Us
 2. Run your app on an actual iOS device. To do so, first [run the react-native server on the local network](https://facebook.github.io/react-native/docs/runningondevice.html) instead of localhost. Then connect your iDevice to your Mac via USB and [select it from the list of available devices and simulators](https://i.imgur.com/6ifsu8Q.jpg) in the very top bar. (Next to the build and stop buttons)
 
 3. Open the app and buy something with your Sandbox Tester Apple Account!
+
+### Testing Promoted In-App Purchases
+To test the promoted in-app purchases you can use this link, fill the bundle id and the product identifier and then open the link on a device:
+`itms-services://?action=purchaseIntent&bundleId=<BUNDLE_ID>&productIdentifier=<PRODUCT_IDENTIFIER>`
+
+Check the documentation here:
+https://developer.apple.com/documentation/storekit/in_app_purchase/testing_promoted_in_app_purchases?language=objc
 
 ## Monthly Subscriptions
 
