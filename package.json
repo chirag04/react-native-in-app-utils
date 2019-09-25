@@ -1,6 +1,6 @@
 {
   "name": "react-native-in-app-utils",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "description": "A react-native wrapper for handling in-app payments.",
   "author": {
     "name": "Chirag Jain",

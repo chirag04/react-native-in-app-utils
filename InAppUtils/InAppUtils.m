@@ -244,6 +244,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
     }
 }
 
+// Fetch Grand Unified Receipt
 - (NSString *)grandUnifiedReceipt
 {
     NSURL *receiptUrl = [[NSBundle mainBundle] appStoreReceiptURL];
