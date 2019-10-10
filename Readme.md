@@ -79,7 +79,15 @@ InAppUtils.purchaseProduct(productIdentifier, (error, response) => {
    // NOTE for v3.0: User can cancel the payment which will be available as error object here.
    if(response && response.productIdentifier) {
       Alert.alert('Purchase Successful', 'Your Transaction ID is ' + response.transactionIdentifier);
+
       //unlock store here.
+
+      // After providing the item, we call finishPurchase to finalize the transaction.
+      InAppUtils.finishPurchase(response.transactionIdentifier, (error) => {
+        if (!error) {
+          // Transaction Complete
+        }
+      });
    }
 });
 ```
@@ -104,6 +112,40 @@ https://stackoverflow.com/questions/29255568/is-there-any-way-to-know-purchase-m
 
 **NOTE:**  `originalTransactionDate` and `originalTransactionIdentifier` are only available for subscriptions that were previously cancelled or expired.
 
+## Check for any pending transactions
+
+Sometimes transactions aren't instantaneous, and can update while the user is not in the app. It is a good idea to check for any pending purchases on app start:
+
+```javascript
+
+// During app startup:
+
+InAppUtils.getPendingPurchases((error, response) => {
+
+  if(error) {
+    Alert.alert('itunes Error', 'Could not connect to itunes store.');
+  } else {
+
+    response.forEach((purchase) => {
+      if (purchase.transactionState === 'purchased') {
+
+        // Logic here to deliver purchased product...
+
+        // Call finishPurchase to finalize the transaction.
+        InAppUtils.finishPurchase(purchase.transactionIdentifier, error => {
+          if (!error) {
+            // Transaction Complete
+          }
+        });
+
+      }
+    });
+
+  }
+
+}
+```
+
 ### Restore payments
 
 ```javascript
@@ -112,7 +154,7 @@ InAppUtils.restorePurchases((error, response) => {
       Alert.alert('itunes Error', 'Could not connect to itunes store.');
    } else {
       Alert.alert('Restore Successful', 'Successfully restores all your purchases.');
-      
+
       if (response.length === 0) {
         Alert.alert('No Purchases', "We didn't find any purchases to restore.");
         return;
