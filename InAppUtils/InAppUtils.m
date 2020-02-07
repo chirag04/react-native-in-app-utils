@@ -259,11 +259,14 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
 }
 
 - (NSDictionary *)getPurchaseData:(SKPaymentTransaction *)transaction {
+    NSData *dataReceipt = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] appStoreReceiptURL]];
+    NSString *receipt = [dataReceipt base64EncodedStringWithOptions:0];
+
     NSMutableDictionary *purchase = [NSMutableDictionary dictionaryWithDictionary: @{
                                                                                      @"transactionDate": @(transaction.transactionDate.timeIntervalSince1970 * 1000),
                                                                                      @"transactionIdentifier": transaction.transactionIdentifier,
                                                                                      @"productIdentifier": transaction.payment.productIdentifier,
-                                                                                     @"transactionReceipt": [[transaction transactionReceipt] base64EncodedStringWithOptions:0]
+                                                                                     @"transactionReceipt": receipt
                                                                                      }];
     // originalTransaction is available for restore purchase and purchase of cancelled/expired subscriptions
     SKPaymentTransaction *originalTransaction = transaction.originalTransaction;
