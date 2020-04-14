@@ -229,10 +229,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
         products = [NSMutableArray arrayWithArray:response.products];
         NSMutableArray *productsArrayForJS = [NSMutableArray array];
         for(SKProduct *item in response.products) {
-            NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-               formatter.numberStyle = NSNumberFormatterCurrencyStyle;
-               formatter.locale = item.priceLocale;
-            
+                        
             NSArray *discounts;
             
             if (@available(iOS 12.2, *)) {
@@ -290,8 +287,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
               
                 
                 if(item.introductoryPrice != nil){
-                    
-                    formatter.locale = item.introductoryPrice.priceLocale;
+                                        
                     introductoryPricePrice = item.introductoryPrice.price;
                     introductoryPriceSubscriptionNumberOfUnit = [NSString stringWithFormat:@"%li",  item.introductoryPrice.subscriptionPeriod.numberOfUnits];
                     
