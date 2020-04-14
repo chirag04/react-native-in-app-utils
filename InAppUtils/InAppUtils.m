@@ -2,6 +2,7 @@
 #import <StoreKit/StoreKit.h>
 #import <React/RCTLog.h>
 #import <React/RCTUtils.h>
+#import <StoreKit/StoreKit.h>
 #import "SKProduct+StringPrice.h"
 
 @implementation InAppUtils
@@ -218,8 +219,6 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
     }
 }
 
-//- (void)requestStorefrontCountryCodeWithCompletionHandler:(void (^)(NSString *storefrontCountryCode, NSError *error))completionHandler;
-
 // SKProductsRequestDelegate protocol method
 - (void)productsRequest:(SKProductsRequest *)request
      didReceiveResponse:(SKProductsResponse *)response
@@ -235,32 +234,71 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                formatter.locale = item.priceLocale;
             
             NSArray *discounts;
-                 #if __IPHONE_12_2
-                 if (@available(iOS 12.2, *)) {
-                     discounts = [self getDiscountData:[item.discounts copy]];
-                 }
-                 #endif
+            
+            if (@available(iOS 12.2, *)) {
+                discounts = [self getDiscountData:[item.discounts copy]];
+            }
             
             NSString* currencyCode = @"";
                 if (@available(iOS 10.0, *)) {
                     currencyCode = item.priceLocale.currencyCode;
                 }
             
-            NSString* localizedPrice = [formatter stringFromNumber:item.price];
-            NSString* introductoryPricePrice = localizedPrice;
             
+            NSString* introductoryPricePrice = @"";
             NSString* introductoryPriceIdentifier = @"";
             NSString* introductoryPricePaymentMode = @"";
             NSString* introductoryPriceNumberOfPeriods = @"";
-            NSString* introductoryPriceSubscriptionPeriod = @"";
+            NSString* introductoryPriceSubscriptionUnit = @"";
             NSString* introductoryPriceType= @"";
+            NSString* introductoryPriceSubscriptionNumberOfUnit = @"";
+            
+            NSString* subscriptionPeriodNumberOfUnits = @"";
+            NSString* subscriptionPeriodUnit= @"";
+            
+            NSString* sfrontCountryCode= @"";
+            NSString* sfrontIdentifier= @"";
+            
+            
+            if (@available(iOS 13.0, *)) {
+                SKStorefront * sfront;
+                sfrontCountryCode = sfront.countryCode ? sfront.countryCode : @"";
+                sfrontIdentifier = sfront.identifier ? sfront.identifier : @"";
+            }
+            
+            NSDictionary *storeFront = @{
+                @"countryCode": sfrontCountryCode,
+                @"identifier": sfrontIdentifier,
+            };
             
             if (@available(iOS 11.2, *)) {
+                switch (item.subscriptionPeriod.unit) {
+                    case SKProductPeriodUnitDay:
+                        subscriptionPeriodUnit = @"DAY";
+                    break;
+                    case SKProductPeriodUnitWeek:
+                        subscriptionPeriodUnit = @"WEEK";
+                    break;
+                    case SKProductPeriodUnitMonth:
+                        subscriptionPeriodUnit = @"MONTH";
+                    break;
+                    case SKProductPeriodUnitYear:
+                        subscriptionPeriodUnit = @"YEAR";
+                    break;
+                    default:
+                        subscriptionPeriodUnit = @"";
+                    }
+                
+                subscriptionPeriodNumberOfUnits = [NSString stringWithFormat:@"%li",  item.subscriptionPeriod.numberOfUnits];
+                
+              
+                
                 if(item.introductoryPrice != nil){
                     
                     formatter.locale = item.introductoryPrice.priceLocale;
                     introductoryPricePrice = [formatter stringFromNumber:item.introductoryPrice.price];
-
+                    introductoryPriceSubscriptionNumberOfUnit = [NSString stringWithFormat:@"%li",  item.introductoryPrice.subscriptionPeriod.numberOfUnits];
+                    
                     switch (item.introductoryPrice.paymentMode) {
                         case SKProductDiscountPaymentModeFreeTrial:
                             introductoryPricePaymentMode = @"FREETRIAL";
@@ -282,16 +320,17 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                     
                     
                     if (item.introductoryPrice.subscriptionPeriod.unit == SKProductPeriodUnitDay) {
-                        introductoryPriceSubscriptionPeriod = @"DAY";
+                        introductoryPriceSubscriptionUnit = @"DAY";
                     } else if (item.introductoryPrice.subscriptionPeriod.unit == SKProductPeriodUnitWeek) {
-                        introductoryPriceSubscriptionPeriod = @"WEEK";
+                        introductoryPriceSubscriptionUnit = @"WEEK";
                     } else if (item.introductoryPrice.subscriptionPeriod.unit == SKProductPeriodUnitMonth) {
-                        introductoryPriceSubscriptionPeriod = @"MONTH";
+                        introductoryPriceSubscriptionUnit = @"MONTH";
                     } else if (item.introductoryPrice.subscriptionPeriod.unit == SKProductPeriodUnitYear) {
-                        introductoryPriceSubscriptionPeriod = @"YEAR";
+                        introductoryPriceSubscriptionUnit = @"YEAR";
                     } else {
-                        introductoryPriceSubscriptionPeriod = @"";
+                        introductoryPriceSubscriptionUnit = @"";
                     }
+                    
                     
                     if (@available(iOS 12.2, *)) {
                         introductoryPriceIdentifier = item.introductoryPrice.identifier ? item.introductoryPrice.identifier : @"";
@@ -310,14 +349,12 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                     }
                 }
                 
-            }else{
-                introductoryPriceIdentifier = @"";
-                introductoryPricePrice = @"";
-                introductoryPricePaymentMode = @"";
-                introductoryPriceNumberOfPeriods = @"";
-                introductoryPriceSubscriptionPeriod = @"";
-                introductoryPriceType= @"";
             }
+            
+            NSDictionary *introductoryPriceSubscriptionPeriod = @{
+                    @"unit": introductoryPriceSubscriptionUnit,
+                    @"numberOfUnit":introductoryPriceSubscriptionNumberOfUnit,
+            };
             
             NSDictionary *introductoryPrice = @{
                 @"identifier": introductoryPriceIdentifier,
@@ -325,23 +362,31 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                 @"price": introductoryPricePrice,
                 @"paymentMode": introductoryPricePaymentMode,
                 @"numberOfPeriods": introductoryPriceNumberOfPeriods,
+                @"subscriptionPeriod": introductoryPriceSubscriptionPeriod,
             };
             
-                NSDictionary *product = @{
-                    @"identifier": item.productIdentifier,
-                    @"price": item.price,
-                    @"currencySymbol": [item.priceLocale objectForKey:NSLocaleCurrencySymbol],
-                    @"currencyCode": currencyCode,
-                    @"priceString": item.priceString,
-                    @"countryCode": [item.priceLocale objectForKey: NSLocaleCountryCode],
-                    @"downloadable": item.isDownloadable ? @"true" : @"false" ,
-                    @"description": item.localizedDescription ? item.localizedDescription : @"",
-                    @"title": item.localizedTitle ? item.localizedTitle : @"",
-                    @"discounts": discounts,
-                    @"introductoryPrice": introductoryPrice,
-                };
+            NSDictionary *subscriptionPeriod = @{
+                @"unit": subscriptionPeriodUnit,
+                @"numberOfUnit":subscriptionPeriodNumberOfUnits,
+            };
+          
+            NSDictionary *product = @{
+                @"storeFront": storeFront,
+                @"identifier": item.productIdentifier,
+                @"price": item.price,
+                @"currencySymbol": [item.priceLocale objectForKey:NSLocaleCurrencySymbol],
+                @"currencyCode": currencyCode,
+                @"priceString": item.priceString,
+                @"countryCode": [item.priceLocale objectForKey: NSLocaleCountryCode],
+                @"downloadable": item.isDownloadable ? @"true" : @"false" ,
+                @"description": item.localizedDescription ? item.localizedDescription : @"",
+                @"title": item.localizedTitle ? item.localizedTitle : @"",
+                @"discounts": discounts,
+                @"introductoryPrice": introductoryPrice,
+                @"subscriptionPeriod": subscriptionPeriod,
+            };
             
-                [productsArrayForJS addObject:product];
+            [productsArrayForJS addObject:product];
           
         }
         callback(@[[NSNull null], productsArrayForJS]);
@@ -404,7 +449,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
 
 
             NSString* discountIdentifier = @"";
-            #if __IPHONE_12_2
+            
             if (@available(iOS 12.2, *)) {
                 discountIdentifier = discount.identifier;
                 switch (discount.type) {
@@ -420,7 +465,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                 }
 
             }
-            #endif
+        
 
             [mappedDiscounts addObject:[NSDictionary dictionaryWithObjectsAndKeys:
                                         discountIdentifier, @"identifier",
