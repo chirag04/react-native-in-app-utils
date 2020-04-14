@@ -245,7 +245,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                 }
             
             
-            NSString* introductoryPricePrice = @"";
+            NSDecimalNumber* introductoryPricePrice = [NSDecimalNumber zero];
             NSString* introductoryPriceIdentifier = @"";
             NSString* introductoryPricePaymentMode = @"";
             NSString* introductoryPriceNumberOfPeriods = @"";
@@ -256,20 +256,16 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
             NSString* subscriptionPeriodNumberOfUnits = @"";
             NSString* subscriptionPeriodUnit= @"";
             
-            NSString* sfrontCountryCode= @"";
-            NSString* sfrontIdentifier= @"";
+            NSString* countryCode= @"";
             
             
             if (@available(iOS 13.0, *)) {
                 SKStorefront * sfront;
-                sfrontCountryCode = sfront.countryCode ? sfront.countryCode : @"";
-                sfrontIdentifier = sfront.identifier ? sfront.identifier : @"";
+                countryCode = sfront.countryCode ? sfront.countryCode : @"";
+            }else{
+                countryCode = [item.priceLocale objectForKey: NSLocaleCountryCode];
             }
             
-            NSDictionary *storeFront = @{
-                @"countryCode": sfrontCountryCode,
-                @"identifier": sfrontIdentifier,
-            };
             
             if (@available(iOS 11.2, *)) {
                 switch (item.subscriptionPeriod.unit) {
@@ -296,7 +292,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                 if(item.introductoryPrice != nil){
                     
                     formatter.locale = item.introductoryPrice.priceLocale;
-                    introductoryPricePrice = [formatter stringFromNumber:item.introductoryPrice.price];
+                    introductoryPricePrice = item.introductoryPrice.price;
                     introductoryPriceSubscriptionNumberOfUnit = [NSString stringWithFormat:@"%li",  item.introductoryPrice.subscriptionPeriod.numberOfUnits];
                     
                     switch (item.introductoryPrice.paymentMode) {
@@ -371,13 +367,12 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
             };
           
             NSDictionary *product = @{
-                @"storeFront": storeFront,
                 @"identifier": item.productIdentifier,
                 @"price": item.price,
                 @"currencySymbol": [item.priceLocale objectForKey:NSLocaleCurrencySymbol],
                 @"currencyCode": currencyCode,
                 @"priceString": item.priceString,
-                @"countryCode": [item.priceLocale objectForKey: NSLocaleCountryCode],
+                @"countryCode": countryCode,
                 @"downloadable": item.isDownloadable ? @"true" : @"false" ,
                 @"description": item.localizedDescription ? item.localizedDescription : @"",
                 @"title": item.localizedTitle ? item.localizedTitle : @"",
