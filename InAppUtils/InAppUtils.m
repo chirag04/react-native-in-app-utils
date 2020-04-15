@@ -227,7 +227,8 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
     RCTResponseSenderBlock callback = _callbacks[key];
     if (callback) {
         products = [NSMutableArray arrayWithArray:response.products];
-        NSMutableArray *productsArrayForJS = [NSMutableArray array];
+        NSMutableArray *productsArrayForJS = [[NSMutableArray alloc] init];
+        
         for(SKProduct *item in response.products) {
                         
             NSArray *discounts;
@@ -373,7 +374,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                 @"downloadable": item.isDownloadable ? @"true" : @"false" ,
                 @"description": item.localizedDescription ? item.localizedDescription : @"",
                 @"title": item.localizedTitle ? item.localizedTitle : @"",
-                @"discounts": discounts,
+                @"discounts": discounts ? discounts: @"",
                 @"introductoryPrice": introductoryPrice,
                 @"subscriptionPeriod": subscriptionPeriod,
             };
