@@ -237,9 +237,10 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
             }
             
             NSString* currencyCode = @"";
-                if (@available(iOS 10.0, *)) {
-                    currencyCode = item.priceLocale.currencyCode;
-                }
+            
+            if (@available(iOS 10.0, *)) {
+                currencyCode = item.priceLocale.currencyCode;
+            }
             
             
             NSDecimalNumber* introductoryPricePrice = [NSDecimalNumber zero];
