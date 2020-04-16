@@ -259,8 +259,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
             
             
             if (@available(iOS 13.0, *)) {
-                SKStorefront * sfront;
-                countryCode = sfront.countryCode ? sfront.countryCode : @"";
+                countryCode = [[SKPaymentQueue defaultQueue] storefront].countryCode;
             }else{
                 countryCode = [item.priceLocale objectForKey: NSLocaleCountryCode];
             }
