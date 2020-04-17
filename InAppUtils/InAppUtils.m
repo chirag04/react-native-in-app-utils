@@ -242,21 +242,11 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
             if (@available(iOS 10.0, *)) {
                 currencyCode = item.priceLocale.currencyCode;
             }
-            
-            
-            NSDecimalNumber* introductoryPricePrice = [NSDecimalNumber zero];
-            NSString* introductoryPriceIdentifier = @"";
-            NSString* introductoryPricePaymentMode = @"";
-            NSString* introductoryPriceNumberOfPeriods = @"";
-            NSString* introductoryPriceSubscriptionUnit = @"";
-            NSString* introductoryPriceType= @"";
-            NSString* introductoryPriceSubscriptionNumberOfUnit = @"";
-            
-            NSString* subscriptionPeriodNumberOfUnits = @"";
-            NSString* subscriptionPeriodUnit= @"";
-            
-            NSString* countryCode= @"";
-            
+
+            NSString *subscriptionPeriodNumberOfUnits = @"";
+            NSString *subscriptionPeriodUnit= @"";
+            NSString *countryCode= @"";
+            NSDictionary *introductoryPrice = nil;
             
             if (@available(iOS 13.0, *)) {
                 countryCode = [[SKPaymentQueue defaultQueue] storefront].countryCode;
@@ -283,14 +273,19 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                         subscriptionPeriodUnit = @"";
                     }
                 
-                subscriptionPeriodNumberOfUnits = [NSString stringWithFormat:@"%li",  item.subscriptionPeriod.numberOfUnits];
-                
-              
+                subscriptionPeriodNumberOfUnits = [NSString stringWithFormat:@"%lu",  (unsigned long)item.subscriptionPeriod.numberOfUnits];
                 
                 if(item.introductoryPrice != nil){
-                                        
+                    NSDecimalNumber* introductoryPricePrice = [NSDecimalNumber zero];
+                    NSString* introductoryPriceIdentifier = @"";
+                    NSString* introductoryPricePaymentMode = @"";
+                    NSString* introductoryPriceNumberOfPeriods = @"";
+                    NSString* introductoryPriceSubscriptionUnit = @"";
+                    NSString* introductoryPriceType= @"";
+                    NSString* introductoryPriceSubscriptionNumberOfUnits = @"";
+                    
                     introductoryPricePrice = item.introductoryPrice.price;
-                    introductoryPriceSubscriptionNumberOfUnit = [NSString stringWithFormat:@"%li",  item.introductoryPrice.subscriptionPeriod.numberOfUnits];
+                    introductoryPriceSubscriptionNumberOfUnits = [NSString stringWithFormat:@"%lu",  (unsigned long) item.introductoryPrice.subscriptionPeriod.numberOfUnits];
                     
                     switch (item.introductoryPrice.paymentMode) {
                         case SKProductDiscountPaymentModeFreeTrial:
@@ -340,27 +335,28 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                             break;
                         }
                     }
+                    
+                    NSDictionary *introductoryPriceSubscriptionPeriod = @{
+                            @"unit": introductoryPriceSubscriptionUnit,
+                            @"numberOfUnits":introductoryPriceSubscriptionNumberOfUnits,
+                    };
+                    
+                    introductoryPrice = @{
+                        @"identifier": introductoryPriceIdentifier,
+                        @"type": introductoryPriceType,
+                        @"price": introductoryPricePrice,
+                        @"paymentMode": introductoryPricePaymentMode,
+                        @"numberOfPeriods": introductoryPriceNumberOfPeriods,
+                        @"subscriptionPeriod": introductoryPriceSubscriptionPeriod,
+                    };
+                }else{
+                    introductoryPrice = @{};
                 }
-                
             }
-            
-            NSDictionary *introductoryPriceSubscriptionPeriod = @{
-                    @"unit": introductoryPriceSubscriptionUnit,
-                    @"numberOfUnit":introductoryPriceSubscriptionNumberOfUnit,
-            };
-            
-            NSDictionary *introductoryPrice = @{
-                @"identifier": introductoryPriceIdentifier,
-                @"type": introductoryPriceType,
-                @"price": introductoryPricePrice,
-                @"paymentMode": introductoryPricePaymentMode,
-                @"numberOfPeriods": introductoryPriceNumberOfPeriods,
-                @"subscriptionPeriod": introductoryPriceSubscriptionPeriod,
-            };
-            
+                        
             NSDictionary *subscriptionPeriod = @{
                 @"unit": subscriptionPeriodUnit,
-                @"numberOfUnit":subscriptionPeriodNumberOfUnits,
+                @"numberOfUnits":subscriptionPeriodNumberOfUnits,
             };
           
             NSDictionary *product = @{
@@ -374,7 +370,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                 @"description": item.localizedDescription ? item.localizedDescription : @"",
                 @"title": item.localizedTitle ? item.localizedTitle : @"",
                 @"discounts": discounts ? discounts: @"",
-                @"introductoryPrice": introductoryPrice,
+                @"introductoryPrice":  introductoryPrice,
                 @"subscriptionPeriod": subscriptionPeriod,
             };
             
