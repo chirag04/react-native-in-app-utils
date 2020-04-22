@@ -286,26 +286,22 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                     
                     introductoryPricePrice = item.introductoryPrice.price;
                     introductoryPriceSubscriptionNumberOfUnits = [NSString stringWithFormat:@"%lu",  (unsigned long) item.introductoryPrice.subscriptionPeriod.numberOfUnits];
+                    introductoryPriceNumberOfPeriods = [@(item.introductoryPrice.numberOfPeriods) stringValue];
                     
                     switch (item.introductoryPrice.paymentMode) {
                         case SKProductDiscountPaymentModeFreeTrial:
                             introductoryPricePaymentMode = @"FREETRIAL";
-                            introductoryPriceNumberOfPeriods = [@(item.introductoryPrice.subscriptionPeriod.numberOfUnits) stringValue];
                             break;
                         case SKProductDiscountPaymentModePayAsYouGo:
                             introductoryPricePaymentMode = @"PAYASYOUGO";
-                            introductoryPriceNumberOfPeriods = [@(item.introductoryPrice.numberOfPeriods) stringValue];
                             break;
                         case SKProductDiscountPaymentModePayUpFront:
                             introductoryPricePaymentMode = @"PAYUPFRONT";
-                            introductoryPriceNumberOfPeriods = [@(item.introductoryPrice.subscriptionPeriod.numberOfUnits) stringValue];
                             break;
                         default:
-                            introductoryPricePaymentMode = @"";
-                            introductoryPriceNumberOfPeriods = @"0";
+                            introductoryPricePaymentMode = @"";                            
                             break;
                     }
-                    
                     
                     if (item.introductoryPrice.subscriptionPeriod.unit == SKProductPeriodUnitDay) {
                         introductoryPriceSubscriptionUnit = @"DAY";
@@ -398,23 +394,21 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
             formatter.locale = discount.priceLocale;
             localizedPrice = [formatter stringFromNumber:discount.price];
             NSString *numberOfPeriods;
-
+            
+            numberOfPeriods = [@(discount.numberOfPeriods) stringValue];
+            
             switch (discount.paymentMode) {
                 case SKProductDiscountPaymentModeFreeTrial:
                     paymendMode = @"FREETRIAL";
-                    numberOfPeriods = [@(discount.subscriptionPeriod.numberOfUnits) stringValue];
                     break;
                 case SKProductDiscountPaymentModePayAsYouGo:
                     paymendMode = @"PAYASYOUGO";
-                    numberOfPeriods = [@(discount.numberOfPeriods) stringValue];
                     break;
                 case SKProductDiscountPaymentModePayUpFront:
                     paymendMode = @"PAYUPFRONT";
-                    numberOfPeriods = [@(discount.subscriptionPeriod.numberOfUnits) stringValue];
                     break;
                 default:
                     paymendMode = @"";
-                    numberOfPeriods = @"0";
                     break;
             }
 
