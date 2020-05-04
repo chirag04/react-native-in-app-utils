@@ -345,9 +345,11 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                         @"numberOfPeriods": introductoryPriceNumberOfPeriods,
                         @"subscriptionPeriod": introductoryPriceSubscriptionPeriod,
                     };
-                }else{
+                } else {
                     introductoryPrice = @{};
                 }
+            } else {
+                introductoryPrice = @{};
             }
                         
             NSDictionary *subscriptionPeriod = @{
