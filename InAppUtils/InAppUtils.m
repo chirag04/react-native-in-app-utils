@@ -354,7 +354,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                         
             NSDictionary *subscriptionPeriod = @{
                 @"unit": subscriptionPeriodUnit,
-                @"numberOfUnits":subscriptionPeriodNumberOfUnits,
+                @"numberOfUnits":subscriptionPeriodNumberOfUnits ? subscriptionPeriodNumberOfUnits : @"",
             };
           
             NSDictionary *product = @{
