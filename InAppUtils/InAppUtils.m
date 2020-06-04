@@ -237,23 +237,12 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                 discounts = [self getDiscountData:[item.discounts copy]];
             }
             
-            NSString* currencyCode = @"";
-            
-            if (@available(iOS 10.0, *)) {
-                currencyCode = item.priceLocale.currencyCode;
-            }
+            NSString* currencyCode = [item.priceLocale objectForKey:NSLocaleCurrencyCode];
+            NSString* countryCode = [item.priceLocale objectForKey:NSLocaleCountryCode];
 
             NSString *subscriptionPeriodNumberOfUnits = @"";
             NSString *subscriptionPeriodUnit= @"";
-            NSString *countryCode= @"";
             NSDictionary *introductoryPrice = nil;
-            
-            if (@available(iOS 13.0, *)) {
-                countryCode = [[SKPaymentQueue defaultQueue] storefront].countryCode;
-            }else{
-                countryCode = [item.priceLocale objectForKey: NSLocaleCountryCode];
-            }
-            
             
             if (@available(iOS 11.2, *)) {
                 switch (item.subscriptionPeriod.unit) {
@@ -361,7 +350,7 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
                 @"identifier": item.productIdentifier,
                 @"price": item.price,
                 @"currencySymbol": [item.priceLocale objectForKey:NSLocaleCurrencySymbol],
-                @"currencyCode": currencyCode,
+                @"currencyCode": currencyCode ? currencyCode : @"",
                 @"priceString": item.priceString,
                 @"countryCode": countryCode ? countryCode : @"",
                 @"downloadable": item.isDownloadable ? @"true" : @"false" ,
