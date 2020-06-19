@@ -311,7 +311,7 @@ RCT_EXPORT_METHOD(clearCompletedTransactions:(RCTResponseSenderBlock)callback) {
         products = [NSMutableArray arrayWithArray:response.products];
         NSMutableArray *productsArrayForJS = [NSMutableArray array];
         for(SKProduct *item in response.products) {
-            NSDictionary *product = @{
+            NSMutableDictionary *product = [NSMutableDictionary dictionaryWithDictionary:@{
                                       @"identifier": item.productIdentifier,
                                       @"price": item.price,
                                       @"currencySymbol": [item.priceLocale objectForKey:NSLocaleCurrencySymbol],
@@ -321,7 +321,12 @@ RCT_EXPORT_METHOD(clearCompletedTransactions:(RCTResponseSenderBlock)callback) {
                                       @"downloadable": item.isDownloadable ? @"true" : @"false" ,
                                       @"description": item.localizedDescription ? item.localizedDescription : @"",
                                       @"title": item.localizedTitle ? item.localizedTitle : @"",
-                                      };
+                                      }];
+            if (@available(iOS 11.2, *)) {
+                if (item.introductoryPrice) {
+                    product[@"introPrice"] = @(item.introductoryPrice.price.floatValue) ?: @"";
+                }
+            }
             [productsArrayForJS addObject:product];
         }
         callback(@[[NSNull null], productsArrayForJS]);
