@@ -63,11 +63,10 @@ shouldAddStorePayment:(SKPayment *)payment
         switch (transaction.transactionState) {
             case SKPaymentTransactionStateFailed: {
                 NSLog(@"purchase failed");
-                NSString *key = RCTKeyForInstance(transaction.payment.productIdentifier);
-                RCTResponseSenderBlock callback = _callbacks[key];
+                RCTResponseSenderBlock callback = _callbacks[transaction.payment.productIdentifier];
                 if (callback) {
                     callback(@[RCTJSErrorFromNSError(transaction.error)]);
-                    [_callbacks removeObjectForKey:key];
+                    [_callbacks removeObjectForKey:transaction.payment.productIdentifier];
                 } else {
                     RCTLogWarn(@"No callback registered for transaction with state failed.");
                 }
@@ -77,12 +76,11 @@ shouldAddStorePayment:(SKPayment *)payment
             case SKPaymentTransactionStatePurchased: {
                 NSLog(@"purchased");
                 currentTransaction = transaction;
-                NSString *key = RCTKeyForInstance(transaction.payment.productIdentifier);
-                RCTResponseSenderBlock callback = _callbacks[key];
+                RCTResponseSenderBlock callback = _callbacks[transaction.payment.productIdentifier];
                 NSDictionary *purchase = [self getPurchaseData:transaction];
                 if (callback) {
                     callback(@[[NSNull null], purchase]);
-                    [_callbacks removeObjectForKey:key];
+                    [_callbacks removeObjectForKey:transaction.payment.productIdentifier];
                 }
                 if (hasPurchaseCompletedListeners) {
                     [self sendEventWithName:@"purchaseCompleted" body:purchase];
@@ -141,7 +139,7 @@ RCT_EXPORT_METHOD(purchaseProduct:(NSString *)productIdentifier
             payment.applicationUsername = username;
         }
         [[SKPaymentQueue defaultQueue] addPayment:payment];
-        _callbacks[RCTKeyForInstance(payment.productIdentifier)] = callback;
+        _callbacks[payment.productIdentifier] = callback;
     } else {
         callback(@[RCTMakeError(@"invalid_product", nil, nil)]);
     }
