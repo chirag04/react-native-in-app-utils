@@ -212,7 +212,52 @@ RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
     }
 }
 
+RCT_EXPORT_METHOD(refreshReceipt:(RCTResponseSenderBlock)callback)
+{
+    [self refreshReceipt:callback testExpired:NO testRevoked:NO];
+}
+
+RCT_EXPORT_METHOD(testRefreshExpiredReceipt:(RCTResponseSenderBlock)callback)
+{
+    [self refreshReceipt:callback testExpired:YES testRevoked:NO];
+}
+
+RCT_EXPORT_METHOD(testRefreshRevokeReceipt:(RCTResponseSenderBlock)callback)
+{
+    [self refreshReceipt:callback testExpired:NO testRevoked:YES];
+}
+
+- (void)refreshReceipt:(RCTResponseSenderBlock)callback
+           testExpired:(BOOL)testExpired
+           testRevoked:(BOOL)testRevoked
+{
+    SKReceiptRefreshRequest *refreshRequest;
+    if (testExpired || testRevoked) {
+        NSDictionary *properties = @{
+                                     SKReceiptPropertyIsExpired:@(testExpired),
+                                     SKReceiptPropertyIsRevoked:@(testRevoked)
+                                     };
+        refreshRequest = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:properties];
+    } else {
+        refreshRequest = [[SKReceiptRefreshRequest alloc] init];
+    }
+    refreshRequest.delegate = self;
+    _callbacks[RCTKeyForInstance(refreshRequest)] = callback;
+    [refreshRequest start];
+}
+
 // SKProductsRequestDelegate protocol method
+
+- (void)requestDidFinish:(SKRequest *)request
+{
+    NSString *key = RCTKeyForInstance(request);
+    RCTResponseSenderBlock callback = _callbacks[key];
+    if (callback) {
+        callback(@[[NSNull null], @"finished"]);
+        [_callbacks removeObjectForKey:key];
+    }
+}
+
 - (void)productsRequest:(SKProductsRequest *)request
      didReceiveResponse:(SKProductsResponse *)response
 {
