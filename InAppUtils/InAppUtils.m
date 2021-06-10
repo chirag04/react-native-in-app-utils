@@ -190,6 +190,35 @@ RCT_EXPORT_METHOD(canMakePayments:(RCTResponseSenderBlock)callback)
     callback(@[@(canMakePayments)]);
 }
 
+RCT_EXPORT_METHOD(refreshReceipt:(BOOL)testExpired
+                  testRevoked:(BOOL)testRevoked
+                  callback:(RCTResponseSenderBlock)callback)
+{
+    SKReceiptRefreshRequest *refreshRequest;
+    if (testExpired || testRevoked) {
+        NSDictionary *properties = @{
+                                     SKReceiptPropertyIsExpired:@(testExpired),
+                                     SKReceiptPropertyIsRevoked:@(testRevoked)
+                                     };
+        refreshRequest = [[SKReceiptRefreshRequest alloc] initWithReceiptProperties:properties];
+    } else {
+        refreshRequest = [[SKReceiptRefreshRequest alloc] init];
+    }
+    refreshRequest.delegate = self;
+    _callbacks[RCTKeyForInstance(refreshRequest)] = callback;
+    [refreshRequest start];
+}
+
+- (void)requestDidFinish:(SKRequest *)request
+{
+    NSString *key = RCTKeyForInstance(request);
+    RCTResponseSenderBlock callback = _callbacks[key];
+    if (callback) {
+        callback(@[[NSNull null], @"finished"]);
+        [_callbacks removeObjectForKey:key];
+    }
+}
+
 RCT_EXPORT_METHOD(receiptData:(RCTResponseSenderBlock)callback)
 {
     NSString *receipt = [self grandUnifiedReceipt];
